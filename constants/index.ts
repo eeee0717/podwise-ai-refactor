@@ -4,23 +4,18 @@ export const appName = 'Podwise-AI'
 export const githubUrl = 'https://github.com/eeee0717/podwise-ai'
 export const verticalLinks: LinkProp[] = [
   {
-    title: 'Social',
-    icon: 'lucide:user-2',
+    title: 'Home',
+    icon: 'i-carbon-home',
+    path: '/',
   },
   {
-    title: 'Updates',
-    icon: 'lucide:alert-circle',
+    title: 'Episodes',
+    icon: 'i-carbon-microphone',
+    path: '/episodes',
   },
   {
-    title: 'Forums',
-    icon: 'lucide:message-square',
-  },
-  {
-    title: 'Shopping',
-    icon: 'lucide:shopping-cart',
-  },
-  {
-    title: 'Promotions',
-    icon: 'lucide:archive',
+    title: 'Podcasts',
+    icon: 'i-carbon-media-library',
+    path: '/podcasts',
   },
 ]

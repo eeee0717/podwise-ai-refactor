@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils'
 
 export interface LinkProp {
   title: string
-  label?: string
   icon: string
+  path: string
 }
 
 interface NavProps {
@@ -43,21 +43,13 @@ const props = defineProps<NavProps>()
         <a
           v-else
           :key="`2-${index}`"
-          href="#"
+          :href="link.path"
           :class="cn(
             buttonVariants({ variant: 'ghost', size: 'sm' }),
           )"
         >
           <Icon :name="link.icon" class="mr-2 size-4" />
           {{ link.title }}
-          <span
-            v-if="link.label"
-            :class="cn(
-              'ml-auto',
-            )"
-          >
-            {{ link.label }}
-          </span>
         </a>
       </template>
     </nav>
