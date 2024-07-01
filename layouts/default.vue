@@ -20,7 +20,7 @@ function onExpand() {
         <ResizablePanelGroup
           id="resize-panel-group-1"
           direction="horizontal"
-          class="h-full max-h-[800px] items-stretch"
+          class="h-full items-stretch"
         >
           <ResizablePanel
             id="resize-panel-1"
@@ -35,7 +35,7 @@ function onExpand() {
           >
             <VerticalNav :is-collapsed="isCollapsed" :links="verticalLinks" />
           </ResizablePanel>
-          <ResizableHandle id="resize-handle-1" with-handle />
+          <ResizableHandle id="resize-handle-1" class="h-screen" with-handle />
           <ResizablePanel id="resize-panel-2" :min-size="30">
             <slot />
           </ResizablePanel>
