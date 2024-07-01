@@ -8,6 +8,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
+    '@nuxt/image',
+    '@nuxt/icon',
   ],
   shadcn: {
     /**

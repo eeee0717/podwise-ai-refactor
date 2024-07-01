@@ -5,7 +5,7 @@
   "packageManager": "pnpm@9.1.1",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --port 3030",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -27,6 +27,8 @@
     "@iconify/json": "^2.2.151",
     "@nuxt/content": "^2.9.0",
     "@nuxt/devtools": "latest",
+    "@nuxt/icon": "^1.0.0",
+    "@nuxt/image": "^1.7.0",
     "@nuxtjs/color-mode": "^3.3.2",
     "@nuxtjs/tailwindcss": "^6.12.0",
     "@unocss/nuxt": "^0.57.7",
