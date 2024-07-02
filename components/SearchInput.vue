@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next'
 import { Input } from '~/components/ui/input'
-import type { SearchState } from '~/types/states'
-import { SearchIconDict } from '~/types/states'
+import type { SearchState } from '~/types/States'
+import { SearchIconDict } from '~/types/States'
 
 const props = defineProps<{
   onSearch: (event: KeyboardEvent) => void
   searchState: SearchState
 }>()
-
+const searchValue = defineModel()
 const stateIcon = computed(() => {
   return SearchIconDict[props.searchState]
 })
@@ -16,7 +16,7 @@ const stateIcon = computed(() => {
 
 <template>
   <div class="relative w-full max-w-sm items-center">
-    <Input id="search" type="text" placeholder="Search..." class=" px-10" @keyup.enter="props.onSearch" />
+    <Input id="search" v-model="searchValue" type="text" placeholder="Search..." class=" px-10" @keyup.enter="props.onSearch" />
     <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
       <Search class="size-6 text-muted-foreground" />
     </span>

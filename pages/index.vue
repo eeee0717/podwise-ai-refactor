@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { SearchState } from '~/types/states'
+import { useFetchEpisode } from '~/composable/useEpisode'
+import { SearchState } from '~/types/States'
 
 const searchState = ref<SearchState>(SearchState.Idle)
-function onSearch() {
+const searchValue = ref<string>('')
+async function onSearch() {
   searchState.value = SearchState.Loading
-  console.warn('searching...')
-  // wait for 1 second
-  setTimeout(() => {
-    searchState.value = SearchState.Success
-  }, 1000)
+  const episode = await useFetchEpisode(searchValue.value)
+
+  console.warn(episode)
 }
 </script>
 
 <template>
   <div class="w-full flex justify-center m-2">
-    <SearchInput :on-search="onSearch" :search-state="searchState" />
+    <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
   </div>
 </template>
