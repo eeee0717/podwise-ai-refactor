@@ -6,7 +6,7 @@ interface ResponseData {
   data: Episode
 }
 
-async function fetchEpisode(eid: string): Promise<Episode> {
+async function fetchEpisode(eid: string) {
   const token: Token = await fetchToken()
   try {
     const response = await $fetch<ResponseData>(`/v1/episode/get?eid=${eid}`, {
@@ -15,20 +15,20 @@ async function fetchEpisode(eid: string): Promise<Episode> {
       headers: useTokenHeaders(token),
     })
 
-    return response.data
+    return {
+      episode: response.data,
+      statusCode: 200,
+    }
   }
   catch (e) {
-    console.error(e)
-    throw createError({
+    return {
+      episode: null,
       statusCode: 400,
-      message: 'get episode failed',
-    })
+    }
   }
 }
 
 export default defineEventHandler(async (event) => {
   const { eid } = await readBody(event)
-  console.warn('eid', eid)
-  const episode = await fetchEpisode(eid)
-  return episode
+  return await fetchEpisode(eid)
 })

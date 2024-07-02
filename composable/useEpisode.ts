@@ -1,3 +1,5 @@
+import type { Episode } from '~/types'
+
 export async function useFetchEpisode(eid: string) {
   return await $fetch('/api/episode/get', {
     method: 'POST',
