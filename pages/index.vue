@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
+import { handleFetchEpisodes } from '~/composable/useEpisodes'
 import { handleFetchPodcast, podcastRegex } from '~/composable/usePodcast'
 import { SearchState } from '~/types/States'
 
@@ -12,7 +13,8 @@ async function onSearch() {
     statusCode = await handleFetchEpisode(searchValue.value)
   }
   else if (searchValue.value.match(podcastRegex)) {
-    statusCode = await handleFetchPodcast(searchValue.value)
+    // statusCode = await handleFetchPodcast(searchValue.value)
+    statusCode = await handleFetchEpisodes(searchValue.value)
   }
   searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
 }
