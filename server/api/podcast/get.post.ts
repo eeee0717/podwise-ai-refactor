@@ -1,35 +1,34 @@
 import { fetchToken } from '../token/get.post'
 import { useTokenHeaders } from '~/server/utils'
-import type { Episode, Token } from '~/types'
+import type { Podcast, Token } from '~/types'
 
 interface ResponseData {
-  data: Episode
+  data: Podcast
 }
 
-async function fetchEpisode(eid: string) {
+async function fetchPodcast(pid: string) {
   const token: Token = await fetchToken()
   try {
-    const response = await $fetch<ResponseData>(`/v1/episode/get?eid=${eid}`, {
+    const response = await $fetch<ResponseData>(`/v1/podcast/get?pid=${pid}`, {
       baseURL: BASE_URL,
       method: 'GET',
       headers: useTokenHeaders(token),
     })
-
     return {
-      episode: response.data,
+      podcast: response.data,
       statusCode: 200,
     }
   }
   catch (e) {
-    console.error('fetchEpisode Error', e)
+    console.error('fetchPodcast Error', e)
     return {
-      episode: null,
+      podcast: null,
       statusCode: 400,
     }
   }
 }
 
 export default defineEventHandler(async (event) => {
-  const { eid } = await readBody(event)
-  return await fetchEpisode(eid)
+  const { pid } = await readBody(event)
+  return await fetchPodcast(pid)
 })

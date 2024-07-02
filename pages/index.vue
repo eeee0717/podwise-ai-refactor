@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { useFetchEpisode } from '~/composable/useEpisode'
-import type { Episode } from '~/types'
+import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
+import { handleFetchPodcast, podcastRegex } from '~/composable/usePodcast'
 import { SearchState } from '~/types/States'
 
 const searchState = ref<SearchState>(SearchState.Idle)
 const searchValue = ref<string>('')
 async function onSearch() {
   searchState.value = SearchState.Loading
-  const { episode, statusCode } = await useFetchEpisode(searchValue.value)
-  if (statusCode !== 200) {
-    searchState.value = SearchState.Error
-    return
+  let statusCode = 0
+  if (searchValue.value.match(episodeRegex)) {
+    statusCode = await handleFetchEpisode(searchValue.value)
   }
-  searchState.value = SearchState.Success
-  console.warn(episode!.eid)
+  else if (searchValue.value.match(podcastRegex)) {
+    statusCode = await handleFetchPodcast(searchValue.value)
+  }
+  searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
 }
 </script>
 
