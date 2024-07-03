@@ -7,9 +7,11 @@ interface ResponseData {
   total: number
 }
 
-let loadMoreKey: string | undefined
-let total: number = 0
-async function fetchEpisodes(pid: string) {
+async function fetchEpisodes(
+  pid: string,
+  loadMoreKey?: string,
+  allEpisodes: Episode[] = [],
+): Promise<{ episodes: Episode[] | null, statusCode: number }> {
   const token: Token = await fetchToken()
   try {
     const response = await $fetch<ResponseData>('/v1/episode/list', {
@@ -18,32 +20,22 @@ async function fetchEpisodes(pid: string) {
       headers: useTokenHeaders(token),
       body: JSON.stringify({ pid, loadMoreKey }),
     })
-    loadMoreKey = response.loadMoreKey
-    total = response.total
-    return {
-      episodes: response.data,
-      statusCode: 200,
+    allEpisodes = allEpisodes.concat(response.data)
+    if (response.loadMoreKey) {
+      return await fetchEpisodes(pid, response.loadMoreKey, allEpisodes)
+    }
+    else {
+      return { episodes: allEpisodes, statusCode: 200 }
     }
   }
   catch (e) {
     console.error('fetchEpisodes Error', e)
-    return {
-      episodes: null,
-      statusCode: 400,
-    }
+    return { episodes: null, statusCode: 400 }
   }
 }
 
 export default defineEventHandler(async (event) => {
   const { pid } = await readBody(event)
-  let allEpisodes: Episode[] = []
-  while (total === 0 || allEpisodes.length < total) {
-    const { episodes, statusCode } = await fetchEpisodes(pid)
-    if (statusCode !== 200 || !episodes) {
-      return { episodes: null, statusCode }
-    }
-    allEpisodes = allEpisodes.concat(episodes)
-  }
-
-  return { episodes: allEpisodes, statusCode: 200 }
+  const { episodes, statusCode } = await fetchEpisodes(pid)
+  return { episodes, statusCode }
 })
