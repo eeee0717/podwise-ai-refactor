@@ -18,4 +18,9 @@ export const verticalLinks: LinkProp[] = [
     icon: 'i-carbon-media-library',
     path: '/podcasts',
   },
+  {
+    title: 'Test',
+    icon: 'i-carbon-rocket',
+    path: '/test',
+  },
 ]

@@ -1,6 +1,9 @@
 /* eslint-disable node/prefer-global/process */
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
   runtimeConfig: {
     accessToken: process.env.X_JIKE_ACCESS_TOKEN,
     deviceId: process.env.X_JIKE_DEVICE_ID,
@@ -15,6 +18,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxt/image',
     '@nuxt/icon',
+    '@pinia/nuxt',
   ],
   shadcn: {
     /**

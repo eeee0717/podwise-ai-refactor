@@ -1,4 +1,7 @@
-export async function useFetchEpisodes(pid: string) {
+import { useEpisodesStore } from '~/store/useEpisodesStore'
+import type { Episode } from '~/types'
+
+export async function useFetchEpisodes(pid: string): Promise<{ episodes: Episode[] | null, statusCode: number }> {
   return await $fetch('/api/episode/list', {
     method: 'POST',
     headers: {
@@ -10,6 +13,7 @@ export async function useFetchEpisodes(pid: string) {
 export async function handleFetchEpisodes(url: string) {
   const pid = url.split('/').pop() ?? ''
   const { episodes, statusCode } = await useFetchEpisodes(pid)
-  console.warn(episodes)
-  return statusCode
+  const episodesStore = useEpisodesStore()
+  episodesStore.setEpisodes(episodes ?? [])
+  return { episodes, statusCode }
 }

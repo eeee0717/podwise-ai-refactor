@@ -37,7 +37,9 @@ function onExpand() {
           </ResizablePanel>
           <ResizableHandle id="resize-handle-1" class="h-screen" with-handle />
           <ResizablePanel id="resize-panel-2" :min-size="30">
-            <slot />
+            <div class="h-90% overflow-y-auto">
+              <slot />
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>

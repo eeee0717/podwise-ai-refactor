@@ -24,8 +24,8 @@ const props = defineProps<NavProps>()
       <template v-for="(link, index) of props.links">
         <Tooltip v-if="isCollapsed" :key="`1-${index}`" :delay-duration="0">
           <TooltipTrigger as-child>
-            <a
-              href="#"
+            <NuxtLink
+              :href="link.path"
               :class="cn(
                 buttonVariants({ variant: 'ghost', size: 'icon' }),
                 'h-9 w-9',
@@ -33,14 +33,14 @@ const props = defineProps<NavProps>()
             >
               <Icon :name="link.icon" class="size-4" />
               <span class="sr-only">{{ link.title }}</span>
-            </a>
+            </NuxtLink>
           </TooltipTrigger>
           <TooltipContent side="right" class="flex items-center gap-4">
             {{ link.title }}
           </TooltipContent>
         </Tooltip>
 
-        <a
+        <NuxtLink
           v-else
           :key="`2-${index}`"
           :href="link.path"
@@ -50,7 +50,7 @@ const props = defineProps<NavProps>()
         >
           <Icon :name="link.icon" class="mr-2 size-4" />
           {{ link.title }}
-        </a>
+        </NuxtLink>
       </template>
     </nav>
   </div>

@@ -6,7 +6,7 @@ interface ResponseData {
   data: Episode
 }
 
-async function fetchEpisode(eid: string) {
+async function fetchEpisode(eid: string): Promise<{ episode: Episode | null, statusCode: number }> {
   const token: Token = await fetchToken()
   try {
     const response = await $fetch<ResponseData>(`/v1/episode/get?eid=${eid}`, {

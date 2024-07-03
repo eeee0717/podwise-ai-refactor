@@ -6,17 +6,22 @@ import { SearchState } from '~/types/States'
 
 const searchState = ref<SearchState>(SearchState.Idle)
 const searchValue = ref<string>('')
+const router = useRouter()
 async function onSearch() {
   searchState.value = SearchState.Loading
   let statusCode = 0
   if (searchValue.value.match(episodeRegex)) {
-    statusCode = await handleFetchEpisode(searchValue.value)
+    const results = await handleFetchEpisode(searchValue.value)
+    statusCode = results.statusCode
   }
   else if (searchValue.value.match(podcastRegex)) {
     // statusCode = await handleFetchPodcast(searchValue.value)
-    statusCode = await handleFetchEpisodes(searchValue.value)
+    const results = await handleFetchEpisodes(searchValue.value)
+    statusCode = results.statusCode
   }
   searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
+  if (statusCode === 200)
+    router.push('/test')
 }
 </script>
 
