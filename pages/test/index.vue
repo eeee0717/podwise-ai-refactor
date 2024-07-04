@@ -11,9 +11,7 @@ const episodesStore = useEpisodesStore()
         v-for="episode in episodesStore.episodes"
         :key="episode.eid"
         :episode="episode"
-        class="flex flex-col justify-center  w-auto max-w-250px"
-        :height="150"
-        :width="150"
+        class="flex flex-col justify-center w-auto max-w-250px"
       />
     </div>
   </div>

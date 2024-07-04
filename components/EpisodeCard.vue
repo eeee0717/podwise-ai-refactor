@@ -4,8 +4,6 @@ import type { Episode } from '~/types'
 
 const props = defineProps<{
   episode: Episode
-  width?: number
-  height?: number
 }>()
 </script>
 
@@ -18,8 +16,6 @@ const props = defineProps<{
             :src="props.episode.image?.middlePicUrl || props.episode.podcast?.image?.middlePicUrl"
             :alt="props.episode.title"
             crossorigin="anonymous"
-            :height="height"
-            :width="width"
             class="b b-1 rounded-md h-auto w-auto object-cover transition-all hover:scale-105 aspect-square"
           >
         </div>

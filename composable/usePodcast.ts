@@ -1,3 +1,5 @@
+import { usePodcastStore } from '~/store/usePodcastStore'
+
 export const podcastRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/podcast/g
 export async function useFetchPodcast(pid: string) {
   return await $fetch('/api/podcast/get', {
@@ -11,6 +13,8 @@ export async function useFetchPodcast(pid: string) {
 export async function handleFetchPodcast(url: string) {
   const pid = url.split('/').pop() ?? ''
   const { podcast, statusCode } = await useFetchPodcast(pid)
+  const podcastStore = usePodcastStore()
+  podcastStore.setPodcast(podcast ?? {})
   console.warn(podcast)
-  return statusCode
+  return { podcast, statusCode }
 }

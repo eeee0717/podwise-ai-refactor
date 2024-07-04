@@ -15,13 +15,13 @@ async function onSearch() {
     statusCode = results.statusCode
   }
   else if (searchValue.value.match(podcastRegex)) {
-    // statusCode = await handleFetchPodcast(searchValue.value)
-    const results = await handleFetchEpisodes(searchValue.value)
+    const results = await handleFetchPodcast(searchValue.value)
+    // const results = await handleFetchEpisodes(searchValue.value)
     statusCode = results.statusCode
   }
   searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
   if (statusCode === 200)
-    router.push('/test')
+    router.push('/podcasts')
 }
 </script>
 
