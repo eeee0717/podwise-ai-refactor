@@ -10,7 +10,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div :class="cn('space-y-3', $attrs.class ?? '')">
+  <div
+    :class="cn('p-2 flex flex-row items-center justify-center space-y-3 gap-2 hover:bg-gray-9 rounded-md transition-all', $attrs.class ?? '')"
+  >
     <ContextMenu>
       <ContextMenuTrigger>
         <div>
@@ -20,7 +22,7 @@ const props = defineProps<{
             crossorigin="anonymous"
             :height="height"
             :width="width"
-            class="b b-1 rounded-md  object-cover transition-all hover:scale-105 aspect-square"
+            class="rounded-md  object-cover transition-all hover:scale-105 aspect-square"
           >
         </div>
       </ContextMenuTrigger>
@@ -28,10 +30,16 @@ const props = defineProps<{
         <ContextMenuItem>Add to Library</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
-    <div class="space-y-1 text-sm">
-      <h3 class="font-medium leading-none">
+    <div class="flex-row items-center text-sm text-left">
+      <h3 class="flex justify-start text-lg font-medium leading-none">
         {{ props.podcast.title }}
       </h3>
+      <p class="flex justify-start  ">
+        {{ props.podcast.author }}
+      </p>
+      <p class="flex justify-start   ">
+        {{ props.podcast.description }}
+      </p>
     </div>
   </div>
 </template>
