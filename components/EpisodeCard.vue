@@ -15,12 +15,12 @@ const props = defineProps<{
       <ContextMenuTrigger>
         <div>
           <img
-            :src="props.episode.image?.smallPicUrl || props.episode.podcast?.image?.smallPicUrl"
+            :src="props.episode.image?.middlePicUrl || props.episode.podcast?.image?.middlePicUrl"
             :alt="props.episode.title"
             crossorigin="anonymous"
             :height="height"
             :width="width"
-            class="rounded-md h-auto w-auto object-cover transition-all hover:scale-105 aspect-square"
+            class="b b-1 rounded-md h-auto w-auto object-cover transition-all hover:scale-105 aspect-square"
           >
         </div>
       </ContextMenuTrigger>

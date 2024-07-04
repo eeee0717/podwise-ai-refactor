@@ -5,13 +5,13 @@ const episodesStore = useEpisodesStore()
 </script>
 
 <template>
-  <div class="mx-10 h-screen">
-    <div grid="~ cols-3 gap-2">
+  <div class="flex justify-center p-10 h-screen">
+    <div class="justify-center" grid="~ 2xl:cols-5 xl:cols-4 lg:cols-3 md:cols-2 gap-15">
       <EpisodeCard
         v-for="episode in episodesStore.episodes"
         :key="episode.eid"
         :episode="episode"
-        class="w-[150px]"
+        class="flex flex-col justify-center  w-auto max-w-250px"
         :height="150"
         :width="150"
       />
