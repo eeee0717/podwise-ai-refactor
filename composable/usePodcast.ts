@@ -14,7 +14,7 @@ export async function handleFetchPodcast(url: string) {
   const pid = url.split('/').pop() ?? ''
   const { podcast, statusCode } = await useFetchPodcast(pid)
   const podcastStore = usePodcastStore()
-  podcastStore.setPodcast(podcast ?? {})
+  podcastStore.setPodcast(podcast ?? null)
   console.warn(podcast)
   return { podcast, statusCode }
 }

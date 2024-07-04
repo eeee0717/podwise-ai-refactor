@@ -10,11 +10,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    :class="cn('p-2 flex flex-row items-center justify-center space-y-3 gap-2 hover:bg-gray-9 rounded-md transition-all', $attrs.class ?? '')"
-  >
-    <ContextMenu>
-      <ContextMenuTrigger>
+  <ContextMenu>
+    <ContextMenuTrigger>
+      <div
+        :class="cn('p-2 flex flex-row items-center justify-center space-y-3 gap-2 hover:bg-gray-9 rounded-md transition-all', $attrs.class ?? '')"
+      >
         <div>
           <img
             :src="props.podcast.image?.middlePicUrl"
@@ -25,21 +25,22 @@ const props = defineProps<{
             class="rounded-md  object-cover transition-all hover:scale-105 aspect-square"
           >
         </div>
-      </ContextMenuTrigger>
-      <ContextMenuContent class="w-40">
-        <ContextMenuItem>Add to Library</ContextMenuItem>
-      </ContextMenuContent>
-    </ContextMenu>
-    <div class="flex-row items-center text-sm text-left">
-      <h3 class="flex justify-start text-lg font-medium leading-none">
-        {{ props.podcast.title }}
-      </h3>
-      <p class="flex justify-start  ">
-        {{ props.podcast.author }}
-      </p>
-      <p class="flex justify-start   ">
-        {{ props.podcast.description }}
-      </p>
-    </div>
-  </div>
+
+        <div class="flex-row items-center text-sm text-left">
+          <h3 class="flex justify-start text-lg font-medium leading-none">
+            {{ props.podcast.title }}
+          </h3>
+          <p class="flex justify-start  ">
+            {{ props.podcast.author }}
+          </p>
+          <p class="flex justify-start   ">
+            {{ props.podcast.description }}
+          </p>
+        </div>
+      </div>
+    </ContextMenuTrigger>
+    <ContextMenuContent class="w-40">
+      <ContextMenuItem>Add to Library</ContextMenuItem>
+    </ContextMenuContent>
+  </ContextMenu>
 </template>
