@@ -1,14 +1,11 @@
+import type { Enclosure, Image, Podcast } from '.'
+
 export interface Episode {
   pid?: string
   eid?: string
+  podcast?: Podcast
   title?: string
   description?: string
-  datePublished?: Date
-  duration?: number
-  shownotes?: string
-  mediaUrl?: string
-  picUrl?: string
-  transcript?: string
-  aiSummary?: string
-  mindmap?: string
+  enclosure?: Enclosure
+  image?: Image
 }

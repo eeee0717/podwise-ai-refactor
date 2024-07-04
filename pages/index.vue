@@ -26,7 +26,7 @@ async function onSearch() {
 </script>
 
 <template>
-  <div class="w-full flex justify-center m-2">
+  <div class="flex justify-center m-2">
     <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
   </div>
 </template>

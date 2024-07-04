@@ -15,5 +15,6 @@ export async function handleFetchEpisodes(url: string) {
   const { episodes, statusCode } = await useFetchEpisodes(pid)
   const episodesStore = useEpisodesStore()
   episodesStore.setEpisodes(episodes ?? [])
+  console.warn('episodes', episodes)
   return { episodes, statusCode }
 }
