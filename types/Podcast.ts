@@ -2,7 +2,7 @@ import type { Episode } from './Episode'
 import type { Image } from '.'
 
 export interface Podcast {
-  pid?: string
+  pid: string
   title?: string
   author?: string
   description?: string

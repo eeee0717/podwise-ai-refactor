@@ -14,6 +14,7 @@ async function fetchPodcast(pid: string) {
       method: 'GET',
       headers: useTokenHeaders(token),
     })
+    await writePodcast(response.data)
     return {
       podcast: response.data,
       statusCode: 200,
@@ -25,6 +26,21 @@ async function fetchPodcast(pid: string) {
       podcast: null,
       statusCode: 400,
     }
+  }
+}
+
+async function writePodcast(podcast: Podcast) {
+  try {
+    await $fetch('/api/db/write', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'podcasts',
+        data: podcast,
+      }),
+    })
+  }
+  catch (e) {
+    console.error('writePodcast Error', e)
   }
 }
 

@@ -10,11 +10,11 @@ import {
 export const podcastsTable = pgTable(
   'podcasts',
   {
-    pid: serial('pid').primaryKey(),
-    title: text('title').notNull(),
-    author: text('author').notNull(),
-    description: text('description').notNull(),
-    image: text('image').notNull(),
+    pid: text('pid').primaryKey(),
+    title: text('title'),
+    author: text('author'),
+    description: text('description'),
+    image: text('image'),
   },
   // (table) => {
   //   return {
@@ -26,12 +26,12 @@ export const podcastsTable = pgTable(
 export const episodesTable = pgTable(
   'episodes',
   {
-    eid: serial('eid').primaryKey(),
+    eid: text('eid').primaryKey(),
     pid: text('pid').references(() => podcastsTable.pid),
-    title: text('title').notNull(),
-    description: text('description').notNull(),
-    enclosure: text('enclosure').notNull(),
-    image: text('image').notNull(),
+    title: text('title'),
+    description: text('description'),
+    enclosure: text('enclosure'),
+    image: text('image'),
   },
   // (table) => {
   //   return {
