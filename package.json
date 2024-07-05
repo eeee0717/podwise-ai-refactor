@@ -10,14 +10,17 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "format": "eslint . --fix"
+    "format": "eslint . --fix",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
+    "@vercel/postgres": "^0.9.0",
     "@vueuse/core": "^10.11.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
+    "drizzle-orm": "^0.31.2",
     "lucide-vue-next": "^0.399.0",
     "pinia": "^2.1.7",
     "radix-vue": "^1.8.5",
@@ -37,6 +40,7 @@
     "@unocss/nuxt": "^0.57.7",
     "@unocss/preset-icons": "^0.57.7",
     "@vueuse/nuxt": "^10.6.1",
+    "drizzle-kit": "^0.22.8",
     "eslint": "^8.54.0",
     "nuxt": "^3.8.2",
     "shadcn-nuxt": "^0.10.4",
