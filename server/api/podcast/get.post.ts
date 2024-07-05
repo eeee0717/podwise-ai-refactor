@@ -14,37 +14,41 @@ async function fetchPodcast(pid: string) {
       method: 'GET',
       headers: useTokenHeaders(token),
     })
-    await writePodcast(response.data)
     return {
       podcast: response.data,
-      statusCode: 200,
     }
   }
   catch (e) {
     console.error('fetchPodcast Error', e)
     return {
       podcast: null,
-      statusCode: 400,
     }
   }
 }
 
 async function writePodcast(podcast: Podcast) {
   try {
-    await $fetch('/api/db/write', {
+    const response = await $fetch('/api/db/write', {
       method: 'POST',
       body: JSON.stringify({
-        name: 'podcasts',
         data: podcast,
       }),
     })
+    return { podcast: response.podcast }
   }
   catch (e) {
     console.error('writePodcast Error', e)
+    return { podcast: null }
   }
 }
 
 export default defineEventHandler(async (event) => {
   const { pid } = await readBody(event)
-  return await fetchPodcast(pid)
+  let response
+  response = await fetchPodcast(pid)
+  response = await writePodcast(response.podcast!)
+  if (!response.podcast) {
+    return { podcast: null, statusCode: 400 }
+  }
+  return { podcast: response.podcast, statusCode: 200 }
 })

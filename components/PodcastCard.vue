@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { cn } from '~/lib/utils'
-import type { Podcast } from '~/types'
+import type { Image, Podcast } from '~/types'
 
 const props = defineProps<{
   podcast: Podcast
   width?: number
   height?: number
 }>()
+
+onMounted(() => {
+  const img = props.podcast.image as Image
+  console.warn(img.middlePicUrl)
+})
 </script>
 
 <template>
