@@ -27,12 +27,17 @@ export async function handleFetchPodcast(url: string) {
   return { podcast, statusCode: response.statusCode }
 }
 
-export function addPodcast(podcast: Podcast) {
-  const formattedPodcast: Podcast = {
-    ...podcast,
-    image: JSON.parse(podcast.image?.toString() ?? '{}') as Image,
+export function formatPodcasts(podcasts: Podcast[]) {
+  return podcasts.map((podcast) => {
+    return {
+      ...podcast,
+      image: JSON.parse(podcast.image?.toString() ?? '{}') as Image,
+    }
+  })
+}
 
-  }
+export function addPodcast(podcast: Podcast) {
+  const formattedPodcast = formatPodcasts([podcast])[0]
   const podcastStore = usePodcastStore()
   podcastStore.addPodcast(formattedPodcast)
   return formattedPodcast
@@ -41,5 +46,6 @@ export function addPodcast(podcast: Podcast) {
 export async function fetchDbPodcasts() {
   const { podcasts } = await $fetch('/api/podcast/query')
   const podcastStore = usePodcastStore()
-  podcastStore.setPodcasts(podcasts)
+  const formattedPodcasts = formatPodcasts(podcasts)
+  podcastStore.setPodcasts(formattedPodcasts)
 }
