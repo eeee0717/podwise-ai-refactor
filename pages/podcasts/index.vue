@@ -17,7 +17,7 @@ onMounted(async () => {
         :key="podcast.pid"
         :podcast="podcast"
         :height="100" :width="100"
-        class="h-110px w-auto max-w-600 "
+        class="h-110px  "
       />
     </div>
   </div>
