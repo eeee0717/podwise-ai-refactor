@@ -28,7 +28,7 @@ async function fetchPodcast(pid: string) {
 
 async function writePodcast(podcast: Podcast) {
   try {
-    const response = await $fetch('/api/db/write', {
+    const response = await $fetch('/api/podcast/write', {
       method: 'POST',
       body: JSON.stringify({
         data: podcast,

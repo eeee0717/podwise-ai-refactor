@@ -1,10 +1,15 @@
 import type { Podcast } from '~/types'
 
 export const usePodcastStore = defineStore('podcast', () => {
-  const podcast = ref<Podcast | null>(null)
+  const podcasts = ref<Podcast[]>([])
 
-  function setPodcast(newPodcast: Podcast | null) {
-    podcast.value = newPodcast
+  function setPodcasts(newPodcasts: Podcast[]) {
+    podcasts.value = newPodcasts
   }
-  return { podcast, setPodcast }
+
+  function addPodcast(newPodcast: Podcast) {
+    podcasts.value.push(newPodcast)
+  }
+
+  return { podcasts, setPodcasts, addPodcast }
 })

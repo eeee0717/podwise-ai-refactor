@@ -13,19 +13,33 @@ export async function useFetchPodcast(pid: string): Promise<{ podcast: Podcast, 
 }
 export async function handleFetchPodcast(url: string) {
   const pid = url.split('/').pop() ?? ''
+  let podcast: Podcast | null = null
   if (!pid) {
-    return { podcast: null, statusCode: 400 }
+    return { podcast, statusCode: 400 }
   }
-  const { podcast, statusCode } = await useFetchPodcast(pid)
+  const response = await useFetchPodcast(pid)
+  podcast = response.podcast
   if (!podcast) {
-    return { podcast: null, statusCode: 400 }
+    return { podcast, statusCode: 400 }
   }
+
+  podcast = addPodcast(podcast)
+  return { podcast, statusCode: response.statusCode }
+}
+
+export function addPodcast(podcast: Podcast) {
   const formattedPodcast: Podcast = {
     ...podcast,
     image: JSON.parse(podcast.image?.toString() ?? '{}') as Image,
 
   }
   const podcastStore = usePodcastStore()
-  podcastStore.setPodcast(formattedPodcast)
-  return { formattedPodcast, statusCode }
+  podcastStore.addPodcast(formattedPodcast)
+  return formattedPodcast
+}
+
+export async function fetchDbPodcasts() {
+  const { podcasts } = await $fetch('/api/podcast/query')
+  const podcastStore = usePodcastStore()
+  podcastStore.setPodcasts(podcasts)
 }
