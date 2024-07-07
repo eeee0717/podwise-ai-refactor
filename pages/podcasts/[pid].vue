@@ -8,6 +8,7 @@ const podcastStore = usePodcastStore()
 const podcast = ref<Podcast>()
 onMounted(() => {
   podcast.value = podcastStore.podcasts.find(podcast => podcast.pid === router.currentRoute.value.params.pid)
+  console.warn(podcast.value?.episodes)
 })
 </script>
 

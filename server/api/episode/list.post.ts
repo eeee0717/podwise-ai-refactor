@@ -34,8 +34,30 @@ async function fetchEpisodes(
   }
 }
 
+async function writeEpisodes(pid: string, episodes: Episode[]) {
+  try {
+    const response = await $fetch('/api/episode/write', {
+      method: 'POST',
+      body: JSON.stringify({
+        pid,
+        data: episodes,
+      }),
+    })
+    return { episodes: response.episodes, statusCode: 200 }
+  }
+  catch (e) {
+    console.error('writeEpisodes Error', e)
+    return { episodes: null, statusCode: 400 }
+  }
+}
+
 export default defineEventHandler(async (event) => {
   const { pid } = await readBody(event)
-  const { episodes, statusCode } = await fetchEpisodes(pid)
-  return { episodes, statusCode }
+  let response
+  response = await fetchEpisodes(pid)
+  response = await writeEpisodes(pid, response.episodes!)
+  if (!response.episodes) {
+    return { episodes: null, statusCode: 400 }
+  }
+  return { episodes: response.episodes, statusCode: 200 }
 })

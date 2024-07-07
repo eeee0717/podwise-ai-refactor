@@ -3,9 +3,9 @@ import type { Image } from '.'
 
 export interface Podcast {
   pid: string
-  title?: string
-  author?: string
-  description?: string
-  episodes?: Episode[]
-  image?: Image
+  title?: string | null
+  author?: string | null
+  description?: string | null
+  episodes?: Episode[] | null
+  image?: Image | null
 }
