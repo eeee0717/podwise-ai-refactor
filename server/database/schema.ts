@@ -1,20 +1,17 @@
-import { drizzle } from 'drizzle-orm/vercel-postgres'
-import { sql } from '@vercel/postgres'
 import {
-  index,
   pgTable,
-  serial,
   text,
 } from 'drizzle-orm/pg-core'
+import { relations } from 'drizzle-orm'
 
 export const podcastsTable = pgTable(
   'podcasts',
   {
     pid: text('pid').primaryKey(),
-    title: text('title'),
-    author: text('author'),
-    description: text('description'),
-    image: text('image'),
+    title: text('title').default(''),
+    author: text('author').default(''),
+    description: text('description').default(''),
+    image: text('image').default(''),
   },
   // (table) => {
   //   return {
@@ -39,3 +36,7 @@ export const episodesTable = pgTable(
   //   }
   // },
 )
+
+// export const podcastRelations = relations(podcastsTable, ({ many }) => ({
+//   episodes: many(episodesTable),
+// }))

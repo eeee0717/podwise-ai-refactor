@@ -27,7 +27,7 @@ export async function handleFetchPodcast(url: string) {
   return { podcast, statusCode: response.statusCode }
 }
 
-export function formatPodcasts(podcasts: Podcast[]) {
+export function formatPodcasts(podcasts: any[]): Podcast[] {
   return podcasts.map((podcast) => {
     return {
       ...podcast,

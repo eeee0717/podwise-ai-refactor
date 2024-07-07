@@ -5,7 +5,6 @@ import { usePodcastStore } from '~/store/usePodcastStore'
 const podcastStore = usePodcastStore()
 onMounted(async () => {
   await fetchDbPodcasts()
-  console.warn(podcastStore.podcasts)
 })
 </script>
 
