@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '~/lib/utils'
-import type { Image, Podcast } from '~/types'
+import type { Podcast } from '~/types'
 
 const props = defineProps<{
   podcast: Podcast
