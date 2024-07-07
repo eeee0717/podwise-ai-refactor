@@ -16,7 +16,7 @@ onMounted(() => {
   <div class="flex justify-center ">
     <div
       v-if="podcast"
-      class="w-screen p-2 flex flex-row   space-y-3 gap-2 hover:bg-hex-8883 rounded-md  hover: bg-gradient-to-br from-cyan-800/10 to-violet-800/10 dark:from-cyan-950 dark:to-violet-950"
+      class="w-full"
     >
       <IntroductionCard :entity="podcast" :img-width="130" />
     </div>

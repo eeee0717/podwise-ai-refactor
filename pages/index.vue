@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
-import { handleFetchEpisodes } from '~/composable/useEpisodes'
 import { handleFetchPodcast, podcastRegex } from '~/composable/usePodcast'
 import { SearchState } from '~/types/States'
 
