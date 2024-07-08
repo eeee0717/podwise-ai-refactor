@@ -1,4 +1,5 @@
-import type { Enclosure, Episode, Image } from '~/types'
+import { formatEpisodes } from './utils'
+import type { Episode } from '~/types'
 
 export const episodeRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/episode/g
 
@@ -19,17 +20,7 @@ export async function useFetchEpisode(eid: string): Promise<{ episode: Episode, 
     },
     body: JSON.stringify({ eid }),
   }).then((res) => {
-    return { episode: formatEpisode(res.episode), statusCode: res.statusCode }
+    return { episode: formatEpisodes([res.episode])[0], statusCode: res.statusCode }
   })
   return { episode, statusCode }
-}
-export function formatEpisode(episode: any | null): Episode {
-  if (!episode) {
-    return {} as Episode
-  }
-  return {
-    ...episode,
-    image: episode.image ? episode.image as Image : {} as Image,
-    enclosure: episode.enclosure ? episode.enclosure as Enclosure : {} as Enclosure,
-  }
 }

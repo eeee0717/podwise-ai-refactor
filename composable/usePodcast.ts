@@ -1,17 +1,28 @@
+import { jsonParseImage } from './utils'
+import { handleFetchEpisodes } from './useEpisodes'
 import { usePodcastStore } from '~/store/usePodcastStore'
-import type { Image, Podcast } from '~/types'
+import type { Episode, Podcast } from '~/types'
 
 export const podcastRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/podcast/g
-export async function handleFetchPodcast(url: string) {
+
+export async function handlePodcast(url: string) {
   const pid = url.split('/').pop()
   if (!pid) {
     return { podcast: {} as Podcast, statusCode: 400 }
   }
+  const { podcast, statusCode: podcastStatusCode } = await handleFetchPodcast(pid)
+  const { episodes, statusCode: episodeStatusCode } = await handleFetchEpisodes(pid)
+  if (podcastStatusCode !== 200 || episodeStatusCode !== 200) {
+    return { podcast: {} as Podcast, episodes: [] as Episode[], statusCode: 400 }
+  }
+  return { podcast, episodes, statusCode: 200 }
+}
+
+export async function handleFetchPodcast(pid: string) {
   const { podcast, statusCode } = await useFetchPodcast(pid)
   if (!podcast) {
-    return { podcast, statusCode }
+    return { podcast: {} as Podcast, statusCode: 400 }
   }
-  await addPodcast(podcast)
   await writePodcastToDb(podcast)
   return { podcast, statusCode }
 }
@@ -40,16 +51,11 @@ export async function writePodcastToDb(podcast: Podcast) {
   return { statusCode }
 }
 
-export async function addPodcast(podcast: Podcast) {
-  const podcastStore = usePodcastStore()
-  podcastStore.addPodcast(podcast)
-}
-
 export function formatPodcasts(podcasts: any[]): Podcast[] {
   return podcasts.map((podcast) => {
     return {
       ...podcast,
-      image: podcast.image ? podcast.image as Image : {} as Image,
+      image: jsonParseImage(podcast.image),
     }
   })
 }
