@@ -7,7 +7,7 @@ import { relations } from 'drizzle-orm'
 export const podcastsTable = pgTable(
   'podcasts',
   {
-    pid: text('pid').primaryKey(),
+    pid: text('pid').primaryKey().notNull(),
     title: text('title').default(''),
     author: text('author').default(''),
     description: text('description').default(''),
@@ -23,12 +23,12 @@ export const podcastsTable = pgTable(
 export const episodesTable = pgTable(
   'episodes',
   {
-    eid: text('eid').primaryKey(),
-    pid: text('pid').references(() => podcastsTable.pid),
-    title: text('title'),
-    description: text('description'),
-    enclosure: text('enclosure'),
-    image: text('image'),
+    eid: text('eid').primaryKey().notNull(),
+    pid: text('pid').references(() => podcastsTable.pid).notNull(),
+    title: text('title').default(''),
+    description: text('description').default(''),
+    enclosure: text('enclosure').default(''),
+    image: text('image').default(''),
   },
   // (table) => {
   //   return {

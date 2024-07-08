@@ -1,5 +1,5 @@
 import { useEpisodesStore } from '~/store/useEpisodesStore'
-import type { Episode } from '~/types'
+import type { Enclosure, Episode, Image } from '~/types'
 
 export async function handleFetchEpisodes(url: string) {
   const pid = url.split('/').pop() ?? ''
@@ -9,12 +9,39 @@ export async function handleFetchEpisodes(url: string) {
   return { episodes, statusCode }
 }
 
-export async function useFetchEpisodes(pid: string): Promise<{ episodes: Episode[] | null, statusCode: number }> {
-  return await $fetch('/api/episode/list', {
+export async function useFetchEpisodes(pid: string): Promise<{ episodes: Episode[], statusCode: number }> {
+  const { episodes, statusCode } = await $fetch('/api/episode/list', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ pid }),
+  }).then((res) => {
+    return { episodes: formatEpisodes(res.episodes), statusCode: res.statusCode }
+  })
+  return { episodes, statusCode }
+}
+
+export async function queryEpisodes(pid: string) {
+  const episodes = await $fetch('/api/episode/query', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ pid }),
+  }).then(res => formatEpisodes(res.episodes))
+  return { episodes }
+}
+
+export function formatEpisodes(episodes: any[] | null): Episode[] {
+  if (!episodes) {
+    return []
+  }
+  return episodes.map((episode) => {
+    return {
+      ...episode,
+      image: JSON.parse(episode.image?.toString() ?? '{}') as Image,
+      enclousure: JSON.parse(episode.enclosure?.toString() ?? '{}') as Enclosure,
+    }
   })
 }

@@ -16,39 +16,19 @@ async function fetchPodcast(pid: string) {
     })
     return {
       podcast: response.data,
+      statusCode: 200,
     }
   }
   catch (e) {
     console.error('fetchPodcast Error', e)
     return {
       podcast: null,
+      statusCode: 400,
     }
-  }
-}
-
-async function writePodcast(podcast: Podcast) {
-  try {
-    const response = await $fetch('/api/podcast/write', {
-      method: 'POST',
-      body: JSON.stringify({
-        data: podcast,
-      }),
-    })
-    return { podcast: response.podcast }
-  }
-  catch (e) {
-    console.error('writePodcast Error', e)
-    return { podcast: null }
   }
 }
 
 export default defineEventHandler(async (event) => {
   const { pid } = await readBody(event)
-  let response
-  response = await fetchPodcast(pid)
-  response = await writePodcast(response.podcast!)
-  if (!response.podcast) {
-    return { podcast: null, statusCode: 400 }
-  }
-  return { podcast: response.podcast, statusCode: 200 }
+  return await fetchPodcast(pid)
 })

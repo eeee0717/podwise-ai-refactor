@@ -20,13 +20,16 @@ export async function handleFetchPodcast(url: string) {
 }
 
 export async function useFetchPodcast(pid: string): Promise<{ podcast: Podcast, statusCode: number }> {
-  return await $fetch('/api/podcast/get', {
+  const { podcast, statusCode } = await $fetch('/api/podcast/get', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ pid }),
+  }).then((res) => {
+    return { podcast: formatPodcasts([res.podcast])[0], statusCode: res.statusCode }
   })
+  return { podcast, statusCode }
 }
 
 export function addPodcast(podcast: Podcast) {
@@ -47,9 +50,9 @@ export function formatPodcasts(podcasts: any[]): Podcast[] {
 
 /// fetch all podcasts from db when page on mounted
 export async function fetchDbPodcasts() {
-  const { podcasts } = await $fetch('/api/podcast/query')
+  const { podcasts } = await $fetch('/api/podcast/query').then((res) => {
+    return { podcasts: formatPodcasts(res.podcasts) }
+  })
   const podcastStore = usePodcastStore()
-  const formattedPodcasts = formatPodcasts(podcasts)
-
-  podcastStore.setPodcasts(formattedPodcasts)
+  podcastStore.setPodcasts(podcasts)
 }

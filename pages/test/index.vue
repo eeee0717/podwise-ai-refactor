@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { usePodcastStore } from '~/store/usePodcastStore'
+import { queryEpisodes } from '~/composable/useEpisodes'
 
-const podcastStore = usePodcastStore()
-onMounted(() => {
-  if (podcastStore.podcasts[0].episodes === null || podcastStore.podcasts[0].episodes === undefined)
-    return
-  console.warn('mounted', podcastStore.podcasts[0]?.episodes[0].eid)
-})
+const pid = ref<string>()
+
+async function onEnter() {
+  console.warn('onEnter', pid.value)
+  const { episodes } = await queryEpisodes(pid.value!)
+  console.warn('episodes', episodes)
+}
 </script>
 
 <template>
   <div class="flex justify-center p-10 h-screen">
-    This is the test page
+    <input v-model="pid" class="h-50px" @keyup.enter="onEnter">
   </div>
 </template>
