@@ -3,20 +3,17 @@ import type { Image, Podcast } from '~/types'
 
 export const podcastRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/podcast/g
 export async function handleFetchPodcast(url: string) {
-  const pid = url.split('/').pop() ?? ''
-  let podcast: Podcast | null = null
+  const pid = url.split('/').pop()
   if (!pid) {
-    return { podcast, statusCode: 400 }
+    return { podcast: {} as Podcast, statusCode: 400 }
   }
-  const response = await useFetchPodcast(pid)
-  podcast = response.podcast
-
+  const { podcast, statusCode } = await useFetchPodcast(pid)
   if (!podcast) {
-    return { podcast, statusCode: 400 }
+    return { podcast, statusCode }
   }
-
-  podcast = addPodcast(podcast)
-  return { podcast, statusCode: response.statusCode }
+  await addPodcast(podcast)
+  await writePodcastToDb(podcast)
+  return { podcast, statusCode }
 }
 
 export async function useFetchPodcast(pid: string): Promise<{ podcast: Podcast, statusCode: number }> {
@@ -32,18 +29,27 @@ export async function useFetchPodcast(pid: string): Promise<{ podcast: Podcast, 
   return { podcast, statusCode }
 }
 
-export function addPodcast(podcast: Podcast) {
-  const formattedPodcast = formatPodcasts([podcast])[0]
+export async function writePodcastToDb(podcast: Podcast) {
+  const { statusCode } = await $fetch('/api/podcast/write', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ podcast }),
+  })
+  return { statusCode }
+}
+
+export async function addPodcast(podcast: Podcast) {
   const podcastStore = usePodcastStore()
-  podcastStore.addPodcast(formattedPodcast)
-  return formattedPodcast
+  podcastStore.addPodcast(podcast)
 }
 
 export function formatPodcasts(podcasts: any[]): Podcast[] {
   return podcasts.map((podcast) => {
     return {
       ...podcast,
-      image: JSON.parse(podcast.image?.toString() ?? '{}') as Image,
+      image: podcast.image ? podcast.image as Image : {} as Image,
     }
   })
 }

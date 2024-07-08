@@ -9,7 +9,7 @@ export async function writePodcast(podcast: Podcast) {
     const db = drizzle(sql, { schema })
     const result = await db.select().from(schema.podcastsTable).where(eq(schema.podcastsTable.pid, podcast.pid))
     if (result.length > 0) {
-    // console.warn('podcast already exists', result)
+      console.warn('podcast already exists')
       return { podcast: result[0] }
     }
     const newData = {
@@ -29,6 +29,7 @@ export async function writePodcast(podcast: Podcast) {
 
 export default defineEventHandler(async (event) => {
   const { podcast } = await readBody(event)
+  console.warn('podcast', podcast)
   await writePodcast(podcast)
   return { statusCode: 200 }
 })
