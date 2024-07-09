@@ -47,7 +47,7 @@ export async function writePodcastToDb(podcast: Podcast) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ podcast }),
-  })
+  }) as { statusCode: number }
   return { statusCode }
 }
 
