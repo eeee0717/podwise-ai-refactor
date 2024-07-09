@@ -1,4 +1,4 @@
-import { formatEpisodes } from './utils'
+import { formatEpisodes, writeEpisodesToDb } from './utils'
 import type { Episode } from '~/types'
 
 export const episodeRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/episode/g
@@ -9,6 +9,10 @@ export async function handleFetchEpisode(url: string) {
     return { episode: {} as Episode, statusCode: 400 }
   }
   const { episode, statusCode } = await useFetchEpisode(eid)
+  if (!episode) {
+    return { episode: {} as Episode, statusCode: 400 }
+  }
+  await writeEpisodesToDb([episode])
   return { episode, statusCode }
 }
 

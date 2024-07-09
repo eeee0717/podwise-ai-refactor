@@ -15,11 +15,11 @@ const props = defineProps<{
         :src="props.entity.image?.smallPicUrl"
         :alt="props.entity.title ?? ''"
         crossorigin="anonymous"
-        :class="cn(`w-${imgWidth}px`, 'rounded-md object-cover transition-all aspect-square') "
+        class="w-130px rounded-md object-cover transition-all aspect-square "
       >
     </div>
 
-    <div :class="cn(`max-w-[calc(98%-${imgWidth}px)]`, 'flex-row items-center  text-left')">
+    <div class="flex-row items-center  text-left">
       <h3 class="flex justify-start text-2xl font-medium leading-none">
         {{ props.entity.title }}
       </h3>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useFetchEpisodes } from '~/composable/useEpisodes'
+import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { cn } from '~/lib/utils'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import type { Episode, Podcast } from '~/types'
@@ -9,7 +10,9 @@ const podcastStore = usePodcastStore()
 const podcast = ref<Podcast>()
 const episodes = ref<Episode[]>()
 onMounted(async () => {
-  podcast.value = podcastStore.podcasts.find(podcast => podcast.pid === router.currentRoute.value.params.pid)
+  const pid = router.currentRoute.value.params.pid as string
+  await fetchDbPodcasts(pid)
+  podcast.value = podcastStore.podcasts.find(podcast => podcast.pid === pid)
   // const { episodes: data, statusCode } = await useFetchEpisodes(podcast.value!.pid)
   // if (statusCode === 200 && data !== null && data !== undefined)
   //   episodes.value = data

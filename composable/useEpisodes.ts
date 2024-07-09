@@ -1,4 +1,4 @@
-import { formatEpisodes } from './utils'
+import { formatEpisodes, writeEpisodesToDb } from './utils'
 import { useEpisodesStore } from '~/store/useEpisodesStore'
 import type { Episode } from '~/types'
 
@@ -22,17 +22,6 @@ export async function useFetchEpisodes(pid: string): Promise<{ episodes: Episode
     return { episodes: formatEpisodes(res.episodes), statusCode: res.statusCode }
   })
   return { episodes, statusCode }
-}
-
-export async function writeEpisodesToDb(episodes: Episode[]) {
-  const { statusCode } = await $fetch('/api/episode/write', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ episodes }),
-  })
-  return { statusCode }
 }
 
 export async function queryEpisodes(pid: string) {

@@ -38,3 +38,14 @@ export function formatEpisodes(episodes: any[] | null): Episode[] {
     }
   })
 }
+
+export async function writeEpisodesToDb(episodes: Episode[]) {
+  const { statusCode } = await $fetch('/api/episode/write', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ episodes }),
+  })
+  return { statusCode }
+}

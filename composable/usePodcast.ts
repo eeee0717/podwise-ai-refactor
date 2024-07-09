@@ -61,8 +61,15 @@ export function formatPodcasts(podcasts: any[]): Podcast[] {
 }
 
 /// fetch all podcasts from db when page on mounted
-export async function fetchDbPodcasts() {
-  const { podcasts } = await $fetch('/api/podcast/query').then((res) => {
+export async function fetchDbPodcasts(pid?: string) {
+  console.warn('fetchDbPodcasts', pid)
+  const { podcasts } = await $fetch('/api/podcast/query', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ pidList: pid }),
+  }).then((res) => {
     return { podcasts: formatPodcasts(res.podcasts) }
   })
   const podcastStore = usePodcastStore()
