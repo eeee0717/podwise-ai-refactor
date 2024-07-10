@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { cn } from '~/lib/utils'
 import type { Episode, Podcast } from '~/types'
 
 const props = defineProps<{
@@ -12,7 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full p-2 flex flex-row   space-y-3 gap-2  rounded-md bg-gradient-to-br from-cyan-800/10 to-violet-800/10 dark:from-cyan-950 dark:to-violet-950">
+  <div class="w-full p-2 flex flex-row  space-y-3 gap-2  rounded-md bg-gradient-to-br from-cyan-800/10 to-violet-800/10 dark:from-cyan-950 dark:to-violet-950">
     <div>
       <img
         :src="props.entity.image?.smallPicUrl"
@@ -29,6 +28,7 @@ onMounted(() => {
       <p v-if="'author' in props.entity" class="text-lg flex justify-start  ">
         {{ props.entity.author }}
       </p>
+      <br v-else>
       <p class="max-w-1100px text-lg flex justify-start leading-normal line-clamp-1 text-ellipsis  max-h-[calc(1.5em*2)] ">
         {{ props.entity.description }}
       </p>

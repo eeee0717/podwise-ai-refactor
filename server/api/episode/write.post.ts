@@ -22,6 +22,7 @@ export async function writeEpisodes(pid: string, episodes: Episode[]) {
         pid: e.pid,
         eid: e.eid,
         title: e.title,
+        shownotes: e.shownotes,
         description: e.description,
         enclosure: JSON.stringify(e.enclosure),
         image: e.image ? JSON.stringify(e.image) : JSON.stringify(e.podcast?.image),

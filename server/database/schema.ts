@@ -26,6 +26,7 @@ export const episodesTable = pgTable(
     eid: text('eid').primaryKey().notNull(),
     pid: text('pid').references(() => podcastsTable.pid).notNull(),
     title: text('title').default(''),
+    shownotes: text('shownotes').default(''),
     description: text('description').default(''),
     enclosure: text('enclosure').default(''),
     image: text('image').default(''),

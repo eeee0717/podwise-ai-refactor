@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import TabTitle from '~/components/TabTitle.vue'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { queryEpisode } from '~/composable/useEpisode'
 import type { Episode } from '~/types'
 
@@ -21,6 +23,24 @@ onMounted(async () => {
       class="w-full"
     >
       <IntroductionCard :entity="episode" />
+      <div class="w-full p-2 my-2 flex flex-row  space-y-3 gap-2 ">
+        <Tabs default-value="shownotes" class="w-full">
+          <TabsList>
+            <TabsTrigger value="shownotes">
+              <TabTitle title="Shownotes" icon="i-carbon-bookmark" />
+            </TabsTrigger>
+            <TabsTrigger value="summary">
+              <TabTitle title="Summary" icon="i-carbon-ai-status" />
+            </TabsTrigger>
+            <TabsTrigger value="transcript">
+              <TabTitle title="Transcript" icon="i-carbon-ibm-watson-language-translator" />
+            </TabsTrigger>
+            <TabsTrigger value="mindmap">
+              <TabTitle title="Mindmap" icon="i-carbon-partition-repartition" />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
     </div>
   </div>
 </template>
