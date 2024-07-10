@@ -4,8 +4,11 @@ import type { Episode, Podcast } from '~/types'
 
 const props = defineProps<{
   entity: Podcast | Episode
-  imgWidth?: number
 }>()
+
+onMounted(() => {
+  console.warn(props.entity)
+})
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { formatEpisodes, writeEpisodesToDb } from './utils'
+import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
 import { useEpisodesStore } from '~/store/useEpisodesStore'
 import type { Episode } from '~/types'
 
@@ -24,6 +24,18 @@ export async function useFetchEpisodes(pid: string): Promise<{ episodes: Episode
   return { episodes, statusCode }
 }
 
+export function formatEpisodes(episodes: any[] | null): Episode[] {
+  if (!episodes) {
+    return []
+  }
+  return episodes.map((episode) => {
+    return {
+      ...episode,
+      image: jsonParseImage(episode.image),
+      enclosure: jsonParseEnclosure(episode.enclosure),
+    }
+  })
+}
 export async function queryEpisodes(pid: string) {
   const episodes = await $fetch('/api/episode/query', {
     method: 'POST',
@@ -32,5 +44,6 @@ export async function queryEpisodes(pid: string) {
     },
     body: JSON.stringify({ pid }),
   }).then(res => formatEpisodes(res.episodes))
+  console.warn('queryEpisodes', episodes)
   return { episodes }
 }

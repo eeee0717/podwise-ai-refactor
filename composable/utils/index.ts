@@ -26,19 +26,6 @@ export function jsonParseEnclosure(enclosure: any): Enclosure {
   return enclosure as Enclosure
 }
 
-export function formatEpisodes(episodes: any[] | null): Episode[] {
-  if (!episodes) {
-    return []
-  }
-  return episodes.map((episode) => {
-    return {
-      ...episode,
-      image: jsonParseImage(episode.image),
-      enclousure: jsonParseEnclosure(episode.enclousure),
-    }
-  })
-}
-
 export async function writeEpisodesToDb(episodes: Episode[]) {
   const { statusCode } = await $fetch('/api/episode/write', {
     method: 'POST',

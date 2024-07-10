@@ -27,7 +27,7 @@ onMounted(async () => {
       v-if="podcast"
       class="w-full"
     >
-      <IntroductionCard :entity="podcast" :img-width="130" />
+      <IntroductionCard :entity="podcast" />
     </div>
     <div class="justify-center m-2" grid="~ 2xl:cols-3 xl:cols-2 lg:cols-2 md:cols-1 gap-15 auto-rows-20">
       <EpisodeCard

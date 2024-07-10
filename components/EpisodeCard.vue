@@ -10,7 +10,7 @@ const props = defineProps<{
 <template>
   <ContextMenu>
     <ContextMenuTrigger>
-      <NuxtLink :to="`/podcasts/${props.episode.eid}`">
+      <NuxtLink :to="`/episodes/${props.episode.eid}`">
         <div
           :class="cn('p-2 flex flex-row items-center justify-center space-y-3 gap-2 hover:bg-hex-8883 rounded-md transition-all hover:scale-105', $attrs.class ?? '')"
         >
