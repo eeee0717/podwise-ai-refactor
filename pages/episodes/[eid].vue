@@ -39,6 +39,12 @@ onMounted(async () => {
               <TabTitle title="Mindmap" icon="i-carbon-partition-repartition" />
             </TabsTrigger>
           </TabsList>
+          <TabsContent
+            value="shownotes"
+            class="flex justify-center"
+          >
+            <ShownotesCard :shownotes="episode.shownotes" />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
