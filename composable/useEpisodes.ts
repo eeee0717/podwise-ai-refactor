@@ -7,7 +7,7 @@ export async function handleFetchEpisodes(pid: string) {
   if (!episodes) {
     return { episodes: [] as Episode[], statusCode: 400 }
   }
-  await writeEpisodesToDb(episodes)
+  await writeEpisodesToDb(pid, episodes)
   return { episodes, statusCode }
 }
 

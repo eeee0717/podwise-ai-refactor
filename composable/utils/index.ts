@@ -26,13 +26,13 @@ export function jsonParseEnclosure(enclosure: any): Enclosure {
   return enclosure as Enclosure
 }
 
-export async function writeEpisodesToDb(episodes: Episode[]) {
+export async function writeEpisodesToDb(pid: string, episodes: Episode[]) {
   const { statusCode } = await $fetch('/api/episode/write', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ episodes }),
+    body: JSON.stringify({ pid, episodes }),
   })
   return { statusCode }
 }
