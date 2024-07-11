@@ -12,7 +12,7 @@ export async function handleFetchEpisode(url: string) {
   if (!episode) {
     return { episode: {} as Episode, statusCode: 400 }
   }
-  await writeEpisodesToDb([episode])
+  await writeEpisodesToDb(episode.pid, [episode])
   return { episode, statusCode }
 }
 
@@ -35,6 +35,8 @@ export function formatEpisode(episode: Episode | null): Episode {
   }
   return {
     ...episode,
+    // pgsql bug: https://www.cnblogs.com/wggj/p/8194313.html
+    shownotes: episode.shownotes ? episode.shownotes?.replace(/\0/g, '') : '',
     image: jsonParseImage(episode.image),
     enclosure: jsonParseEnclosure(episode.enclosure),
   } as Episode

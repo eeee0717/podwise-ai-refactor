@@ -21,7 +21,7 @@ async function onSearch() {
   }
   searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
   if (statusCode === 200)
-    router.push('/test')
+    router.push('/podcasts')
 }
 </script>
 

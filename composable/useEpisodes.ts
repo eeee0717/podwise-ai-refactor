@@ -31,6 +31,8 @@ export function formatEpisodes(episodes: any[] | null): Episode[] {
   return episodes.map((episode) => {
     return {
       ...episode,
+      // pgsql bug: https://www.cnblogs.com/wggj/p/8194313.html
+      shownotes: episode.shownotes ? episode.shownotes?.replace(/\0/g, '') : '',
       image: jsonParseImage(episode.image),
       enclosure: jsonParseEnclosure(episode.enclosure),
     }
