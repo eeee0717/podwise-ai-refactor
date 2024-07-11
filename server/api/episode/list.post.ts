@@ -34,7 +34,14 @@ async function fetchEpisodes(
   }
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   const { pid } = await readBody(event)
-  return await fetchEpisodes(pid)
+  const { episodes, statusCode } = await fetchEpisodes(pid)
+  return { episodes, statusCode }
+}, {
+  maxAge: 1 * 10,
+  getKey: async (event) => {
+    const { pid } = await readBody(event)
+    return `episodes-list-${pid}`
+  },
 })
