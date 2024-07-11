@@ -6,6 +6,7 @@ import type { Episode } from '~/types'
 
 export async function writeEpisodes(pid: string, episodes: Episode[]) {
   try {
+    console.warn('pid', pid)
     const db = drizzle(sql, { schema })
     const existEpisodes = await db.select().from(schema.episodesTable).where(eq(schema.episodesTable.pid, pid))
     if (existEpisodes.length === episodes.length) {
@@ -16,6 +17,7 @@ export async function writeEpisodes(pid: string, episodes: Episode[]) {
     const filterEpisodes = episodes.filter((episode: Episode) =>
       !existEpisodes.some(existEpisode => existEpisode.eid === episode.eid),
     )
+    console.warn('filterEpisodes', filterEpisodes.length)
 
     const newDataList = filterEpisodes.map((e: Episode) => {
       return {

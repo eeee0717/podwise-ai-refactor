@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useFetchEpisodes } from '~/composable/useEpisodes'
+import { handleFetchEpisodes, useFetchEpisodes } from '~/composable/useEpisodes'
 import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import type { Episode, Podcast } from '~/types'
@@ -13,7 +13,7 @@ onMounted(async () => {
   const pid = router.currentRoute.value.params.pid as string
   await fetchDbPodcasts(pid)
   podcast.value = podcastStore.podcasts.find(podcast => podcast.pid === pid)
-  const { episodes: data } = await useFetchEpisodes(podcast.value!.pid)
+  const { episodes: data } = await handleFetchEpisodes(podcast.value!.pid)
   if (data) {
     episodes.value = data
     episodesTest.value = episodes.value?.slice(0, 5)
