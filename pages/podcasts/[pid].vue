@@ -1,14 +1,24 @@
 <script setup lang="ts">
+import SearchInput from '~/components/SearchInput.vue'
+import { Button } from '~/components/ui/button'
+import { Tooltip, TooltipTrigger } from '~/components/ui/tooltip'
 import { handleFetchEpisodes, useFetchEpisodes } from '~/composable/useEpisodes'
 import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
-import type { Episode, Podcast } from '~/types'
+import { type Episode, type Podcast, SearchState } from '~/types'
 
 const router = useRouter()
 const podcastStore = usePodcastStore()
 const { podcasts } = storeToRefs(podcastStore)
 const podcast = ref<Podcast>()
 const episodes = ref<Episode[]>()
+const episodesData = ref<Episode[]>()
+
+const searchValue = ref<string>('')
+const searchState = ref<SearchState>(SearchState.Idle)
+async function onSearch() {
+  episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
+}
 onMounted(async () => {
   const pid = router.currentRoute.value.params.pid as string
   // 检查 podcasts 中是否已存在对应数据
@@ -21,6 +31,7 @@ onMounted(async () => {
   const [{ episodes: data }] = await Promise.all([handleFetchEpisodes(podcast.value!.pid)])
   if (data) {
     episodes.value = data
+    episodesData.value = data
   }
 })
 </script>
@@ -34,9 +45,12 @@ onMounted(async () => {
       >
         <IntroductionCard :entity="podcast" />
       </div>
+      <div class="w-full p-2 my-2 flex flex-row   gap-2 justify-center items-center">
+        <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
+      </div>
       <div class="justify-center m-2" grid="~ 2xl:cols-3 xl:cols-2 lg:cols-2 md:cols-1 gap-15 auto-rows-20">
         <EpisodeCard
-          v-for="episode in episodes"
+          v-for="episode in episodesData"
           :key="episode.eid"
           :episode="episode"
         />
