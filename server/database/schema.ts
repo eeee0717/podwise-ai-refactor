@@ -2,10 +2,8 @@ import {
   boolean,
   pgTable,
   text,
-  time,
   timestamp,
 } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
 
 export const podcastsTable = pgTable(
   'podcasts',

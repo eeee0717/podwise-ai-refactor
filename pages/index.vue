@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
-import { handleFetchPodcast, handlePodcast, podcastRegex } from '~/composable/usePodcast'
+import { handlePodcast, podcastRegex } from '~/composable/usePodcast'
 import { SearchState } from '~/types/States'
 
 const searchState = ref<SearchState>(SearchState.Idle)

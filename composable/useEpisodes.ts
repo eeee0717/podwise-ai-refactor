@@ -1,5 +1,4 @@
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
-import { useEpisodesStore } from '~/store/useEpisodesStore'
 import type { Episode } from '~/types'
 
 export async function handleFetchEpisodes(pid: string) {

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import SearchInput from '~/components/SearchInput.vue'
-import { Button } from '~/components/ui/button'
-import { Tooltip, TooltipTrigger } from '~/components/ui/tooltip'
-import { handleFetchEpisodes, queryEpisodes, useFetchEpisodes } from '~/composable/useEpisodes'
+import { queryEpisodes } from '~/composable/useEpisodes'
 import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import { type Episode, type Podcast, SearchState } from '~/types'
