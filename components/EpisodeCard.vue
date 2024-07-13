@@ -11,13 +11,11 @@ const episode = ref<Episode>(props.episode)
 async function likeEpisode() {
   const { episode: data } = await updateIsLikeEpisode(props.episode.eid, true)
   episode.value = data
-  console.warn('喜欢剧集:', episode.value.title)
 }
 
 async function dislikeEpisode() {
   const { episode: data } = await updateIsLikeEpisode(props.episode.eid, false)
   episode.value = data
-  console.warn('取消喜欢剧集:', props.episode.title)
 }
 // onMounted(() => {
 //   console.warn(props.episode)
@@ -61,9 +59,6 @@ async function dislikeEpisode() {
       </ContextMenuItem>
       <ContextMenuItem v-else @click="dislikeEpisode">
         Dislike the episode
-      </ContextMenuItem>
-      <ContextMenuItem>
-        Others
       </ContextMenuItem>
     </ContextMenuContent>
   </ContextMenu>
