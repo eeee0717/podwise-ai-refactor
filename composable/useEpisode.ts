@@ -1,3 +1,4 @@
+import { formatEpisodes } from './useEpisodes'
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
 import type { Episode } from '~/types'
 
@@ -12,7 +13,7 @@ export async function handleFetchEpisode(url: string) {
   if (!episode) {
     return { episode: {} as Episode, statusCode: 400 }
   }
-  await writeEpisodesToDb(episode.pid, [episode])
+  await writeEpisodesToDb(episode.pid, [episode], true)
   return { episode, statusCode }
 }
 
@@ -45,4 +46,14 @@ export function formatEpisode(episode: Episode | null): Episode {
 export async function queryEpisode(eid: string) {
   const episode = await $fetch(`/api/episode/query?eid=${eid}`).then(res => formatEpisode(res.episode as Episode))
   return { episode }
+}
+
+export async function queryLikedEpisodes() {
+  const episodes = await $fetch('/api/episode/queryLiked', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(res => formatEpisodes(res.episodes))
+  return { episodes }
 }

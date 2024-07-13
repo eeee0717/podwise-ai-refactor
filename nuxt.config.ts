@@ -1,14 +1,17 @@
 /* eslint-disable node/prefer-global/process */
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
+
   runtimeConfig: {
     accessToken: process.env.X_JIKE_ACCESS_TOKEN,
     deviceId: process.env.X_JIKE_DEVICE_ID,
     refreshToken: process.env.X_JIKE_REFRESH_TOKEN,
   },
+
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -20,6 +23,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@pinia/nuxt',
   ],
+
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -31,9 +35,11 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui',
   },
+
   colorMode: {
     classSuffix: '',
   },
+
   nitro: {
     routeRules: {
       '/*': {
@@ -45,4 +51,6 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  compatibilityDate: '2024-07-13',
 })

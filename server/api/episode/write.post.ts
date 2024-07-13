@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 import * as schema from '../../database/schema'
 import type { Episode } from '~/types'
 
-export async function writeEpisodes(pid: string, episodes: Episode[]) {
+export async function writeEpisodes(pid: string, episodes: Episode[], isLiked: boolean) {
   try {
     console.warn('pid', pid)
     const db = drizzle(sql, { schema })
@@ -28,6 +28,7 @@ export async function writeEpisodes(pid: string, episodes: Episode[]) {
         description: e.description,
         enclosure: JSON.stringify(e.enclosure),
         image: e.image ? JSON.stringify(e.image) : JSON.stringify(e.podcast?.image),
+        isLiked,
       }
     })
     await db.insert(schema.episodesTable).values(newDataList)
@@ -39,7 +40,7 @@ export async function writeEpisodes(pid: string, episodes: Episode[]) {
 }
 
 export default defineEventHandler(async (event) => {
-  const { pid, episodes } = await readBody(event)
-  await writeEpisodes(pid, episodes)
+  const { pid, episodes, isLiked } = await readBody(event)
+  await writeEpisodes(pid, episodes, isLiked)
   return { statusCode: 200 }
 })

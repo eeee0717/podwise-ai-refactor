@@ -1,4 +1,5 @@
 import {
+  boolean,
   pgTable,
   text,
 } from 'drizzle-orm/pg-core'
@@ -30,6 +31,7 @@ export const episodesTable = pgTable(
     description: text('description').default(''),
     enclosure: text('enclosure').default(''),
     image: text('image').default(''),
+    isLiked: boolean('isLiked').default(false),
   },
   // (table) => {
   //   return {

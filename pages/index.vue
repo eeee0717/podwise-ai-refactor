@@ -9,19 +9,22 @@ const router = useRouter()
 async function onSearch() {
   searchState.value = SearchState.Loading
   let statusCode = 0
+  let to: string = '/'
   if (searchValue.value.match(episodeRegex)) {
     const results = await handleFetchEpisode(searchValue.value)
     statusCode = results.statusCode
+    to = '/episodes'
   }
   else if (searchValue.value.match(podcastRegex)) {
     const results = await handlePodcast(searchValue.value)
     // const results = await handleFetchPodcast(searchValue.value)
     // const results = await handleFetchEpisodes(searchValue.value)
     statusCode = results.statusCode
+    to = '/podcasts'
   }
   searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
   if (statusCode === 200)
-    router.push('/podcasts')
+    router.push(to)
 }
 </script>
 

@@ -39,7 +39,7 @@ export function formatEpisodes(episodes: any[] | null): Episode[] {
   })
 }
 export async function queryEpisodes(pid: string) {
-  const episodes = await $fetch('/api/episode/query', {
+  const episodes = await $fetch('/api/episode/queryAll', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
