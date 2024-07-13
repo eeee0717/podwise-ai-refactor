@@ -2,6 +2,8 @@ import {
   boolean,
   pgTable,
   text,
+  time,
+  timestamp,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
@@ -31,6 +33,7 @@ export const episodesTable = pgTable(
     description: text('description').default(''),
     enclosure: text('enclosure').default(''),
     image: text('image').default(''),
+    pubDate: timestamp('pubDate', { mode: 'string' }).default(''),
     isLiked: boolean('isLiked').default(false),
   },
   // (table) => {

@@ -2,7 +2,7 @@
 import SearchInput from '~/components/SearchInput.vue'
 import { Button } from '~/components/ui/button'
 import { Tooltip, TooltipTrigger } from '~/components/ui/tooltip'
-import { handleFetchEpisodes, useFetchEpisodes } from '~/composable/useEpisodes'
+import { handleFetchEpisodes, queryEpisodes, useFetchEpisodes } from '~/composable/useEpisodes'
 import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import { type Episode, type Podcast, SearchState } from '~/types'
@@ -28,7 +28,7 @@ onMounted(async () => {
   podcast.value = podcasts.value.find(podcast => podcast.pid === pid)
 
   // 并行获取 episodes 数据
-  const [{ episodes: data }] = await Promise.all([handleFetchEpisodes(podcast.value!.pid)])
+  const { episodes: data } = await queryEpisodes(pid)
   if (data) {
     episodes.value = data
     episodesData.value = data

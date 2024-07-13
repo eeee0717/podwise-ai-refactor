@@ -17,8 +17,8 @@ export default defineCachedEventHandler(async (event) => {
   return { episodes }
 }, {
   maxAge: 1 * 10,
-  getKey: (event) => {
-    const { pid } = event.context.query
+  getKey: async (event) => {
+    const { pid } = await readBody(event)
     return `episodes-${pid}`
   },
 })

@@ -9,5 +9,6 @@ export interface Episode {
   description?: string | null
   enclosure?: Enclosure | null
   image?: Image | null
+  pubDate?: string | null
   isLiked?: boolean
 }

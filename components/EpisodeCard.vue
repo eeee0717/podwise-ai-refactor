@@ -5,6 +5,10 @@ import type { Episode } from '~/types'
 const props = defineProps<{
   episode: Episode
 }>()
+
+// onMounted(() => {
+//   console.warn(props.episode)
+// })
 </script>
 
 <template>
@@ -24,6 +28,9 @@ const props = defineProps<{
           </div>
 
           <div class="w-450px flex-row items-center text-sm text-left">
+            <div v-if="props.episode.isLiked" class="w-full flex text-right justify-end">
+              <Icon text-amber name="i-carbon-star-filled" />
+            </div>
             <h3 class="flex justify-start text-lg font-medium leading-none">
               {{ props.episode.title }}
             </h3>

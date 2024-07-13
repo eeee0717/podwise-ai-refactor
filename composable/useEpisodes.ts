@@ -36,6 +36,8 @@ export function formatEpisodes(episodes: any[] | null): Episode[] {
       image: jsonParseImage(episode.image),
       enclosure: jsonParseEnclosure(episode.enclosure),
     }
+  }).sort((a, b) => {
+    return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
   })
 }
 export async function queryEpisodes(pid: string) {
