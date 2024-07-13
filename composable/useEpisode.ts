@@ -30,7 +30,7 @@ export async function useFetchEpisode(eid: string): Promise<{ episode: Episode, 
   return { episode, statusCode }
 }
 
-export function formatEpisode(episode: Episode | null): Episode {
+export function formatEpisode(episode: any | null): Episode {
   if (!episode) {
     return {} as Episode
   }
@@ -44,7 +44,7 @@ export function formatEpisode(episode: Episode | null): Episode {
 }
 
 export async function queryEpisode(eid: string) {
-  const episode = await $fetch(`/api/episode/query?eid=${eid}`).then(res => formatEpisode(res.episode as Episode))
+  const episode = await $fetch(`/api/episode/query?eid=${eid}`).then(res => formatEpisode(res.episode))
   return { episode }
 }
 
@@ -56,4 +56,15 @@ export async function queryLikedEpisodes() {
     },
   }).then(res => formatEpisodes(res.episodes))
   return { episodes }
+}
+
+export async function updateIsLikeEpisode(eid: string, isLiked: boolean): Promise<{ episode: Episode }> {
+  const episode = await $fetch('/api/episode/updateIsLike', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ eid, isLiked }),
+  }).then(res => formatEpisode(res.episode))
+  return { episode }
 }
