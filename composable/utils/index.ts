@@ -27,12 +27,11 @@ export function jsonParseEnclosure(enclosure: any): Enclosure {
 }
 
 export async function writeEpisodesToDb(pid: string, episodes: Episode[], isLiked = false) {
-  const { statusCode } = await $fetch('/api/episode/write', {
+  await $fetch('/api/episode/write', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ pid, episodes, isLiked }),
   })
-  return { statusCode }
 }

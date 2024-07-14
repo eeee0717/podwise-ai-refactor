@@ -23,7 +23,6 @@ export async function writePodcast(podcast: Podcast) {
   }
   catch (e) {
     console.error('writePodcast Error', e)
-    return { statusCode: 400 }
   }
 }
 
@@ -31,5 +30,4 @@ export default defineEventHandler(async (event) => {
   const { podcast } = await readBody(event)
   console.warn('podcast', podcast)
   await writePodcast(podcast)
-  return { statusCode: 200 }
 })

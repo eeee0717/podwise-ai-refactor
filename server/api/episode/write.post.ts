@@ -37,12 +37,10 @@ export async function writeEpisodes(pid: string, episodes: Episode[], isLiked: b
   }
   catch (e) {
     console.error('writeEpisodes Error', e)
-    return { statusCode: 400 }
   }
 }
 
 export default defineEventHandler(async (event) => {
   const { pid, episodes, isLiked } = await readBody(event)
   await writeEpisodes(pid, episodes, isLiked)
-  return { statusCode: 200 }
 })

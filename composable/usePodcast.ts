@@ -41,14 +41,13 @@ export async function useFetchPodcast(pid: string): Promise<{ podcast: Podcast, 
 }
 
 export async function writePodcastToDb(podcast: Podcast) {
-  const { statusCode } = await $fetch('/api/podcast/write', {
+  await $fetch('/api/podcast/write', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ podcast }),
-  }) as { statusCode: number }
-  return { statusCode }
+  }) // as { statusCode: number }
 }
 
 export function formatPodcasts(podcasts: any[]): Podcast[] {
