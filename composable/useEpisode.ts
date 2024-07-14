@@ -70,3 +70,14 @@ export async function updateIsLikeEpisode(eid: string, isLiked: boolean): Promis
   }).then(res => formatEpisode(res.episode))
   return { episode }
 }
+
+export async function updateTranscriptEpisode(eid: string, transcript: string): Promise<{ episode: Episode }> {
+  const episode = await $fetch('/api/episode/updateTranscript', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ eid, transcript }),
+  }).then(res => formatEpisode(res.episode))
+  return { episode }
+}
