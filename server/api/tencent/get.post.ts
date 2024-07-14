@@ -1,7 +1,8 @@
 import * as tencentcloud from 'tencentcloud-sdk-nodejs-common'
 import type { RuntimeConfig } from 'nuxt/schema'
+import { TaskStatus } from '~/types'
 
-async function getTranscript(taskId: number, config: RuntimeConfig): Promise<{ status: string, result: string }> {
+async function getTranscript(taskId: number, config: RuntimeConfig): Promise<{ status: TaskStatus, result: string }> {
   try {
     const CommonClient = tencentcloud.CommonClient
     const clientConfig = {
@@ -28,15 +29,16 @@ async function getTranscript(taskId: number, config: RuntimeConfig): Promise<{ s
     }
 
     const { Data } = await client.request('DescribeTaskStatus', params)
+    console.warn('Data', Data.Status as TaskStatus)
     return {
-      status: Data.StatusStr,
+      status: Data.Status as TaskStatus,
       result: Data.Result,
     }
   }
   catch (err) {
     console.error('error', err)
     return {
-      status: 'error',
+      status: TaskStatus.Failed,
       result: 'result is empty',
     }
   }

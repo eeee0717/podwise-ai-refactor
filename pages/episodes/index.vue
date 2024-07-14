@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { queryLikedEpisodes } from '~/composable/useEpisode'
-import { type Episode, State } from '~/types'
+import { type Episode, SearchState } from '~/types'
 
 const episodes = ref<Episode[]>([])
 const episodesData = ref<Episode[]>([])
 
 const searchValue = ref<string>('')
-const searchState = ref<State>(State.Idle)
+const searchState = ref<SearchState>(SearchState.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
 }
