@@ -3,7 +3,7 @@ import SearchInput from '~/components/SearchInput.vue'
 import { queryEpisodes } from '~/composable/useEpisodes'
 import { fetchDbPodcasts } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
-import { type Episode, type Podcast, SearchState } from '~/types'
+import { type Episode, type Podcast, State } from '~/types'
 
 const router = useRouter()
 const podcastStore = usePodcastStore()
@@ -13,7 +13,7 @@ const episodes = ref<Episode[]>()
 const episodesData = ref<Episode[]>()
 
 const searchValue = ref<string>('')
-const searchState = ref<SearchState>(SearchState.Idle)
+const searchState = ref<State>(State.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
 }

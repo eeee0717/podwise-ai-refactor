@@ -31,8 +31,9 @@ export const episodesTable = pgTable(
     description: text('description').default(''),
     enclosure: text('enclosure').default(''),
     image: text('image').default(''),
-    pubDate: timestamp('pubDate', { mode: 'string' }).default(''),
+    pubDate: timestamp('pubDate', { mode: 'string' }).defaultNow(),
     isLiked: boolean('isLiked').default(false),
+    transcript: text('transcript').default(''),
   },
   // (table) => {
   //   return {

@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     accessToken: process.env.X_JIKE_ACCESS_TOKEN,
     deviceId: process.env.X_JIKE_DEVICE_ID,
     refreshToken: process.env.X_JIKE_REFRESH_TOKEN,
+    tencentSecretId: process.env.TENCENT_SECRET_ID,
+    tencentSecretKey: process.env.TENCENT_SECRET_KEY,
   },
 
   modules: [

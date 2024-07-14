@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const props = defineProps<{
-  shownotes?: string | null
+import type { Episode } from '~/types'
+
+defineProps<{
+  episode?: Episode
 }>()
 </script>
 
 <template>
-  <div v-if="shownotes" class="shownotes-content text-left max-w-full" v-html="props.shownotes " />
+  <div v-if="episode?.shownotes" class="shownotes-content text-left max-w-full" v-html="episode.shownotes " />
 </template>
 
 <style scoped>

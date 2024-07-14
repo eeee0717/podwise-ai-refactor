@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TabTitle from '~/components/TabTitle.vue'
+import TranscriptCard from '~/components/TranscriptCard.vue'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { queryEpisode } from '~/composable/useEpisode'
 import type { Episode } from '~/types'
@@ -43,7 +44,13 @@ onMounted(async () => {
             value="shownotes"
             class="flex justify-center"
           >
-            <ShownotesCard :shownotes="episode.shownotes" />
+            <ShownotesCard :episode="episode" />
+          </TabsContent>
+          <TabsContent
+            value="transcript"
+            class="flex justify-center"
+          >
+            <TranscriptCard :episode="episode" />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next'
 import { Input } from '~/components/ui/input'
-import type { SearchState } from '~/types/States'
-import { SearchIconDict } from '~/types/States'
+import type { State } from '~/types/States'
+import { stateIconMap } from '~/types/States'
 
 const props = defineProps<{
   onSearch: (event: KeyboardEvent) => void
-  searchState: SearchState
+  searchState: State
 }>()
 const searchValue = defineModel()
 const stateIcon = computed(() => {
-  return SearchIconDict[props.searchState]
+  return stateIconMap[props.searchState]
 })
 </script>
 

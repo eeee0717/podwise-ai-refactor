@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
 import { handlePodcast, podcastRegex } from '~/composable/usePodcast'
-import { SearchState } from '~/types/States'
+import { State } from '~/types/States'
 
-const searchState = ref<SearchState>(SearchState.Idle)
+const searchState = ref<State>(State.Idle)
 const searchValue = ref<string>('')
 const router = useRouter()
 async function onSearch() {
-  searchState.value = SearchState.Loading
+  searchState.value = State.Loading
   let statusCode = 0
   let to: string = '/'
   if (searchValue.value.match(episodeRegex)) {
@@ -22,7 +22,7 @@ async function onSearch() {
     statusCode = results.statusCode
     to = '/podcasts'
   }
-  searchState.value = statusCode === 200 ? SearchState.Success : SearchState.Error
+  searchState.value = statusCode === 200 ? State.Success : State.Error
   if (statusCode === 200)
     router.push(to)
 }

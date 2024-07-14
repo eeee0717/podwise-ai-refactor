@@ -11,4 +11,5 @@ export interface Episode {
   image?: Image | null
   pubDate?: string | null
   isLiked?: boolean
+  transcript?: string | null
 }
