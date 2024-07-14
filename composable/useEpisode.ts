@@ -1,4 +1,5 @@
 import { formatEpisodes } from './useEpisodes'
+import { writePodcastToDb } from './usePodcast'
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
 import type { Episode } from '~/types'
 
@@ -13,6 +14,7 @@ export async function handleFetchEpisode(url: string) {
   if (!episode) {
     return { episode: {} as Episode, statusCode: 400 }
   }
+  await writePodcastToDb(episode.podcast!)
   await writeEpisodesToDb(episode.pid, [episode], true)
   return { episode, statusCode }
 }
