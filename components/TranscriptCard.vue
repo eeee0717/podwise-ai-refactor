@@ -20,9 +20,7 @@ const taskStatus = ref<TaskStatus>(TaskStatus.Waiting)
 
 const { pause, resume } = useTimeoutPoll(async () => {
   console.warn('polling', taskId.value)
-  const { status, result } = await useTranscript(9715816572)
-  episode.value.transcript = result
-  taskStatus.value = status
+  await useTranscript(taskId.value, episode, taskStatus)
 }, 5000)
 
 async function startTranscribing() {

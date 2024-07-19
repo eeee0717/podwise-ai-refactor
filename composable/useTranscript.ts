@@ -1,22 +1,23 @@
-import { TaskStatus } from '~/types'
+import { type Episode, TaskStatus } from '~/types'
 
-export async function useTranscript(taskId: number) {
-  let status = TaskStatus.Waiting
-  let result = ''
+export async function useTranscript(taskId: number, episode: Ref<Episode>, taskStatus: Ref<TaskStatus>) {
+  console.warn('useTranscript...', taskId)
   await new Promise((resolve, reject) => {
     $fetch('/api/tencent/get', {
       method: 'POST',
       body: JSON.stringify({ taskId }),
     }).then((res) => {
-      status = res.status
-      result = res.result
+      taskStatus.value = res.status
       if (res.status === TaskStatus.Failed) {
         reject(res)
       }
       else if (res.status === TaskStatus.Finish) {
+        episode.value.transcript = res.result
+        resolve(res)
+      }
+      else {
         resolve(res)
       }
     })
   })
-  return { status, result }
 }
