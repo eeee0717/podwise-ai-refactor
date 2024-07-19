@@ -10,23 +10,28 @@ const props = defineProps<{
 
 const episode = ref(props.episode)
 
+const taskId = ref<number>(0)
 const transcribeState = ref<SearchState>(SearchState.Idle)
 const stateIcon = computed(() => {
   return stateIconMap[transcribeState.value]
 })
 
-const transcript = ref<string>('')
 const taskStatus = ref<TaskStatus>(TaskStatus.Waiting)
 
 const { pause, resume } = useTimeoutPoll(async () => {
-  const { status, result } = await useTranscript(9663376070)
-  transcript.value = result
+  console.warn('polling', taskId.value)
+  const { status, result } = await useTranscript(9715816572)
+  episode.value.transcript = result
   taskStatus.value = status
 }, 5000)
 
 async function startTranscribing() {
-  // transcribeState.value = SearchState.Loading
-  // const { taskId } = await transcribe(props.episode?.enclosure?.url)
+  transcribeState.value = SearchState.Loading
+  const { taskId: id } = await transcribe(props.episode?.enclosure?.url)
+  if (id === -1) {
+    transcribeState.value = SearchState.Error
+  }
+  taskId.value = id
   // test task id 9663376070
   // const { status, result } = await getTranscript(9663376070)
   // const { episode: data } = await updateTranscriptEpisode(props.episode.eid, result)
@@ -35,13 +40,13 @@ async function startTranscribing() {
   // console.warn('result', result)
   // transcribeState.value = SearchState.Success
   resume()
-  console.warn('startTranscribing')
 }
 
-watchEffect(() => {
-  if (taskStatus.value !== TaskStatus.Waiting) {
+watchEffect(async () => {
+  if (taskStatus.value === TaskStatus.Finish) {
     pause()
-    console.warn('transcript', transcript.value)
+    const { episode: data } = await updateTranscriptEpisode(episode.value.eid, episode.value.transcript!)
+    episode.value = data
   }
 })
 </script>
