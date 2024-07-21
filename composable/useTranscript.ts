@@ -15,6 +15,7 @@ export async function useTranscript(taskId: number, episode: Ref<Episode>, taskS
         episode.value.transcript = res.result
         resolve(res)
       }
+      // avoid status === TaskStatus.Processing cannot resolve
       else {
         resolve(res)
       }
