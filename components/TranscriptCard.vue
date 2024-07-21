@@ -8,53 +8,42 @@ const props = defineProps<{
   episode: Episode
 }>()
 
-const episode = ref(props.episode)
-
-const taskId = ref<number>(0)
-const transcribeState = ref<SearchState>(SearchState.Idle)
-const stateIcon = computed(() => {
-  return stateIconMap[transcribeState.value]
-})
-
-const taskStatus = ref<TaskStatus>(TaskStatus.Waiting)
+const episodeRef = ref(props.episode)
+const taskIdRef = ref<number>(0)
+const transcriptStateRef = ref<SearchState>(SearchState.Idle)
+const stateIconRef = computed(() => stateIconMap[transcriptStateRef.value])
+const taskStatusRef = ref<TaskStatus>(TaskStatus.Waiting)
 
 const { pause, resume } = useTimeoutPoll(async () => {
-  console.warn('polling', taskId.value)
-  await useTranscript(taskId.value, episode, taskStatus)
+  await useTranscript(taskIdRef.value, episodeRef, taskStatusRef)
 }, 5000)
 
 async function startTranscribing() {
-  transcribeState.value = SearchState.Loading
-  const { taskId: id } = await transcribe(props.episode?.enclosure?.url)
-  if (id === -1) {
-    transcribeState.value = SearchState.Error
+  transcriptStateRef.value = SearchState.Loading
+  const { taskId } = await transcribe(episodeRef.value.enclosure?.url)
+  if (taskId === -1) {
+    transcriptStateRef.value = SearchState.Error
+    return
   }
-  taskId.value = id
-  // test task id 9663376070
-  // const { status, result } = await getTranscript(9663376070)
-  // const { episode: data } = await updateTranscriptEpisode(props.episode.eid, result)
-
-  // episode.value = data
-  // console.warn('result', result)
-  // transcribeState.value = SearchState.Success
+  taskIdRef.value = taskId
   resume()
 }
 
 watchEffect(async () => {
-  if (taskStatus.value === TaskStatus.Finish) {
+  if (taskStatusRef.value === TaskStatus.Finish) {
     pause()
-    const { episode: data } = await updateTranscriptEpisode(episode.value.eid, episode.value.transcript!)
-    episode.value = data
+    const { episode: updatedEpisode } = await updateTranscriptEpisode(episodeRef.value.eid, episodeRef.value.transcript ?? '')
+    episodeRef.value = updatedEpisode
   }
 })
 </script>
 
 <template>
-  <div v-if="episode?.transcript" class="max-w-55% text-left whitespace-pre-line" v-html="episode.transcript " />
+  <div v-if="episodeRef?.transcript" class="max-w-55% text-left whitespace-pre-line" v-html="episodeRef.transcript " />
   <p v-else>
-    <Button variant="outline" class="gap-2" :disabled="transcribeState === SearchState.Loading" @click="startTranscribing">
+    <Button variant="outline" class="gap-2" :disabled="transcriptStateRef === SearchState.Loading" @click="startTranscribing">
       <span>Start Transcribing</span>
-      <Icon :name="stateIcon.icon" :style="{ color: stateIcon.color }" class="size-6 text-muted-foreground" />
+      <Icon :name="stateIconRef.icon" :style="{ color: stateIconRef.color }" class="size-6 text-muted-foreground" />
     </Button>
   </p>
 </template>
