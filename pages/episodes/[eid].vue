@@ -47,6 +47,12 @@ onMounted(async () => {
             <ShownotesCard :episode="episode" />
           </TabsContent>
           <TabsContent
+            value="summary"
+            class="flex justify-center"
+          >
+            <SummaryCard :episode="episode" />
+          </TabsContent>
+          <TabsContent
             value="transcript"
             class="flex justify-center"
           >

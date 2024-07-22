@@ -19,6 +19,7 @@ const { pause, resume } = useTimeoutPoll(async () => {
 }, 5000)
 
 async function startTranscribing() {
+  return
   transcriptStateRef.value = SearchState.Loading
   const { taskId } = await transcribe(episodeRef.value.enclosure?.url)
   if (taskId === -1) {
@@ -27,6 +28,11 @@ async function startTranscribing() {
   }
   taskIdRef.value = taskId
   resume()
+}
+
+async function exportTranscript() {
+  // export transcript to markdown file
+
 }
 
 watchEffect(async () => {
@@ -39,11 +45,19 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div v-if="episodeRef?.transcript" class="max-w-55% text-left whitespace-pre-line" v-html="episodeRef.transcript " />
-  <p v-else>
-    <Button variant="outline" class="gap-2" :disabled="transcriptStateRef === SearchState.Loading" @click="startTranscribing">
-      <span>Start Transcribing</span>
-      <Icon :name="stateIconRef.icon" :style="{ color: stateIconRef.color }" class="size-6 text-muted-foreground" />
-    </Button>
-  </p>
+  <div class="flex flex-col justify-center max-w-55%">
+    <div class="flex justify-end">
+      <Button v-show="!episodeRef?.transcript" variant="outline" class="gap-2" :disabled="transcriptStateRef === SearchState.Loading" @click="startTranscribing">
+        <span>Start Transcribing</span>
+        <Icon :name="stateIconRef.icon" :style="{ color: stateIconRef.color }" class="size-6 text-muted-foreground" />
+      </Button>
+      <Button v-show="episodeRef?.transcript" variant="outline" class="gap-2" @click="exportTranscript">
+        <span>Export</span>
+        <Icon name="i-carbon-export" />
+      </Button>
+    </div>
+    <div class="w-full flex justify-center">
+      <div v-if="episodeRef?.transcript" class=" text-left whitespace-pre-line" v-html="episodeRef.transcript " />
+    </div>
+  </div>
 </template>

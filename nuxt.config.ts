@@ -12,6 +12,8 @@ export default defineNuxtConfig({
     refreshToken: process.env.X_JIKE_REFRESH_TOKEN,
     tencentSecretId: process.env.TENCENT_SECRET_ID,
     tencentSecretKey: process.env.TENCENT_SECRET_KEY,
+    openaiApi: process.env.OPENAI_API,
+    openaiBaseUrl: process.env.OPENAI_BASE_URL,
   },
 
   modules: [

@@ -12,4 +12,5 @@ export interface Episode {
   pubDate?: string | null
   isLiked?: boolean
   transcript?: string | null
+  summary?: string | null
 }

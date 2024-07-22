@@ -22,6 +22,7 @@
     "dayjs": "^1.11.11",
     "drizzle-orm": "^0.31.2",
     "lucide-vue-next": "^0.399.0",
+    "openai": "^4.52.7",
     "pinia": "^2.1.7",
     "radix-vue": "^1.8.5",
     "tailwind-merge": "^2.3.0",
