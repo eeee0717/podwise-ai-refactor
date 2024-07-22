@@ -84,3 +84,17 @@ export async function updateTranscriptEpisode(eid: string, transcript?: string):
   }).then(res => formatEpisode(res.episode))
   return { episode }
 }
+
+export async function updateSummaryEpisode(eid: string, summary?: string): Promise<{ episode: Episode }> {
+  if (!summary) {
+    return { episode: {} as Episode }
+  }
+  const episode = await $fetch('/api/episode/updateSummary', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ eid, summary }),
+  }).then(res => formatEpisode(res.episode))
+  return { episode }
+}

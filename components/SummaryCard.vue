@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useAI from '~/composable/useAI'
+import { updateSummaryEpisode } from '~/composable/useEpisode'
 import type { Episode } from '~/types'
 
 const props = defineProps<{
@@ -10,6 +11,8 @@ const episodeRef = ref(props.episode)
 async function summary() {
   // console.warn('summary', episodeRef.value.transcript)
   episodeRef.value.summary = await useAI(episodeRef.value.transcript ?? '')
+  const { episode: updatedEpisode } = await updateSummaryEpisode(episodeRef.value.eid, episodeRef.value.summary ?? '')
+  episodeRef.value = updatedEpisode
 }
 </script>
 
