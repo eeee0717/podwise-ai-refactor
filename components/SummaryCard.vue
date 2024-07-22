@@ -19,7 +19,7 @@ async function summary() {
 <template>
   <div class="flex flex-col justify-center max-w-55%">
     <div class="flex justify-end">
-      <Button v-show="!episodeRef?.summary" variant="outline" class="gap-2" @click="summary">
+      <Button variant="outline" class="gap-2" @click="summary">
         <span>Summary</span>
         <Icon name="i-carbon-ai-status" />
       </Button>

@@ -14,7 +14,7 @@ async function fetchSummary(content: string, config: RuntimeConfig) {
   })
   return await openai.chat.completions.create({
     messages: [
-      { role: 'system', content: 'Your task is to review the provided podcast transcript and create a concise summary that captures the essential information, focusing on the most important points. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview of the podcast content, with a particular focus on clearly indicating what the podcast is about.' },
+      { role: 'system', content: 'Your task is to review the provided podcast transcript and create a concise summary that captures the essential information, focusing on the most important points. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview of the podcast content, with a particular focus on clearly indicating what the podcast is about. Please use chinese as your language.' },
       { role: 'user', content },
     ],
     model: 'gpt-4o-mini',
