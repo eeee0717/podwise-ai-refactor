@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     tencentSecretKey: process.env.TENCENT_SECRET_KEY,
     openaiApi: process.env.OPENAI_API,
     openaiBaseUrl: process.env.OPENAI_BASE_URL,
+    openaiModel: process.env.OPENAI_MODEL || 'gpt-4o-mini',
   },
 
   modules: [
