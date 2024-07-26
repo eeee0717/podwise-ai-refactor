@@ -10,6 +10,7 @@ const episodeRef = ref(props.episode)
 
 async function summary() {
   // console.warn('summary', episodeRef.value.transcript)
+  episodeRef.value.summary = ''
   episodeRef.value.summary = await useAI(episodeRef.value.transcript ?? '')
   const { episode: updatedEpisode } = await updateSummaryEpisode(episodeRef.value.eid, episodeRef.value.summary ?? '')
   episodeRef.value = updatedEpisode
@@ -25,7 +26,7 @@ async function summary() {
       </Button>
     </div>
     <div class="w-full flex justify-center">
-      <div v-if="episodeRef?.summary" class=" text-left whitespace-pre-line" v-html="episodeRef.summary " />
+      <div v-show="episodeRef?.summary" class=" text-left whitespace-pre-line" v-html="episodeRef.summary " />
     </div>
   </div>
 </template>

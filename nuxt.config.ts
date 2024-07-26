@@ -12,9 +12,13 @@ export default defineNuxtConfig({
     refreshToken: process.env.X_JIKE_REFRESH_TOKEN,
     tencentSecretId: process.env.TENCENT_SECRET_ID,
     tencentSecretKey: process.env.TENCENT_SECRET_KEY,
+    provider: process.env.PROVIDER,
     openaiApi: process.env.OPENAI_API,
     openaiBaseUrl: process.env.OPENAI_BASE_URL,
-    openaiModel: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+    openaiModel: process.env.OPENAI_MODEL,
+    groqApi: process.env.GROQ_API,
+    groqBaseUrl: process.env.GROQ_BASE_URL,
+    groqModel: process.env.GROQ_MODEL,
   },
 
   modules: [
