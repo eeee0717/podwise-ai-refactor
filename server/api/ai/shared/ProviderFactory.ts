@@ -10,6 +10,8 @@ export class ProvoderFactory {
         return new OpenAIProvider(config.openaiApi, config.openaiBaseUrl, config.openaiModel)
       case 'GROQ':
         return new GroqProvider(config.groqApi, config.groqBaseUrl, config.groqModel)
+      case 'DOUBAO':
+        return new OpenAIProvider(config.doubaoApi, config.doubaoBaseUrl, config.doubaoModel)
       default:
         throw new Error(`Unsupported provider: ${config.provider}`)
     }

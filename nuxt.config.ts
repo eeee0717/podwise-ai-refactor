@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     groqApi: process.env.GROQ_API,
     groqBaseUrl: process.env.GROQ_BASE_URL,
     groqModel: process.env.GROQ_MODEL,
+    doubaoApi: process.env.DOUBAO_API,
+    doubaoBaseUrl: process.env.DOUBAO_BASE_URL,
+    doubaoModel: process.env.DOUBAO_MODEL,
   },
 
   modules: [
