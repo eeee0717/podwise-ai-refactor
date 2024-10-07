@@ -35,6 +35,7 @@ export const episodesTable = pgTable(
     isLiked: boolean('isLiked').default(false),
     transcript: text('transcript').default(''),
     summary: text('summary').default(''),
+    mindmap: text('mindmap').default(''),
   },
   // (table) => {
   //   return {

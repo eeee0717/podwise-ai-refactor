@@ -1,14 +1,14 @@
 import type { RuntimeConfig } from 'nuxt/schema'
 import { ProvoderFactory } from './shared/ProviderFactory'
-import { summary_prompt } from './shared/prompt'
+import { mindmap_prompt } from './shared/prompt'
 
 export default defineEventHandler(async (event) => {
   const { content } = await readBody(event)
-  const summary = await fetchSummary(content, useRuntimeConfig())
-  return summary
+  const mindmap = await fetchMindmap(content, useRuntimeConfig())
+  return mindmap
 })
 
-async function fetchSummary(content: string, config: RuntimeConfig): Promise<string> {
+async function fetchMindmap(content: string, config: RuntimeConfig): Promise<string> {
   const provider = ProvoderFactory.createProvider(config)
-  return provider.chat(content, summary_prompt)
+  return provider.chat(content, mindmap_prompt)
 }

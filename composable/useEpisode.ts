@@ -98,3 +98,17 @@ export async function updateSummaryEpisode(eid: string, summary?: string): Promi
   }).then(res => formatEpisode(res.episode))
   return { episode }
 }
+
+export async function updateMindmapEpisode(eid: string, mindmap?: string): Promise<{ episode: Episode }> {
+  if (!mindmap) {
+    return { episode: {} as Episode }
+  }
+  const episode = await $fetch('/api/episode/updateMindmap', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ eid, mindmap }),
+  }).then(res => formatEpisode(res.episode))
+  return { episode }
+}

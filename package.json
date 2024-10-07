@@ -11,7 +11,8 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "format": "eslint . --fix",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
@@ -22,6 +23,9 @@
     "dayjs": "^1.11.11",
     "drizzle-orm": "^0.31.2",
     "lucide-vue-next": "^0.399.0",
+    "markmap-lib": "^0.17.0",
+    "markmap-toolbar": "^0.17.0",
+    "markmap-view": "^0.17.0",
     "openai": "^4.52.7",
     "pinia": "^2.1.7",
     "radix-vue": "^1.8.5",

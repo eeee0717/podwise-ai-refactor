@@ -1,6 +1,5 @@
 import OpenAI from 'openai'
 import type { IProvider } from './IProvider'
-import { prompt } from './prompt'
 
 export class GroqProvider implements IProvider {
   provider: OpenAI
@@ -20,7 +19,7 @@ export class GroqProvider implements IProvider {
     })
   }
 
-  async chat(content: string): Promise<string> {
+  async chat(content: string, prompt: string): Promise<string> {
     const completions = await this.provider.chat.completions.create({
       messages: [
         { role: 'system', content: prompt },

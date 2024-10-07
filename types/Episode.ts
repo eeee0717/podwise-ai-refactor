@@ -13,4 +13,5 @@ export interface Episode {
   isLiked?: boolean
   transcript?: string | null
   summary?: string | null
+  mindmap?: string | null
 }

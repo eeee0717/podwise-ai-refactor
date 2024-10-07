@@ -1,4 +1,4 @@
-export default async function useAI(content: string) {
+export default async function useSummary(content: string) {
   const summary = await fetchSummary(content)
   return summary
 }
