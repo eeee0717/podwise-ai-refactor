@@ -1,4 +1,6 @@
 import OpenAI from 'openai'
+import type { ChatCompletion } from 'openai/resources/index.mjs'
+import type { ChatCompletionStream } from 'openai/lib/ChatCompletionStream.mjs'
 import type { IProvider } from './IProvider'
 
 export class OpenAIProvider implements IProvider {
@@ -31,5 +33,23 @@ export class OpenAIProvider implements IProvider {
       throw new Error('No completions')
     }
     return completions.choices[0].message.content
+  }
+
+  async streamChat(content: string, prompt: string, onChunk: (chunk: string) => void): Promise<void> {
+    const stream = this.provider.beta.chat.completions
+      .stream({
+        model: this.model,
+        messages: [
+          { role: 'system', content: prompt },
+          { role: 'user', content },
+        ],
+
+      })
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || ''
+      if (content) {
+        onChunk(content)
+      }
+    }
   }
 }
