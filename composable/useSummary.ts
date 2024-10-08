@@ -1,23 +1,14 @@
-import type { ChatCompletionStream } from 'openai/lib/ChatCompletionStream.mjs'
-
-export default async function useSummary(content: string) {
-  // console.warn('useSummary', content)
-  const summary = await fetchStreamSummary(content)
-  return summary
-}
-
-export async function fetchSummary(content: string): Promise<ChatCompletionStream> {
+export async function fetchSummary(content: string): Promise<string> {
   return await $fetch('/api/ai/summary', {
     method: 'POST',
-    body: JSON.stringify({ content }),
-    responseType: 'stream',
+    body: JSON.stringify({ content, isStream: false }),
   })
 }
 
-export async function fetchStreamSummary(content: string) {
+export async function fetchStreamSummary(content: string): Promise<ReadableStream> {
   const response = await $fetch('/api/ai/summary', {
     method: 'POST',
-    body: { content },
+    body: { content, isStream: true },
     responseType: 'stream',
   }) as ReadableStream
 
