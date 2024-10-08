@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import useSummary from '~/composable/useAI'
 import { updateSummaryEpisode } from '~/composable/useEpisode'
+import useSummary from '~/composable/useSummary'
 import type { Episode } from '~/types'
 
 const props = defineProps<{
