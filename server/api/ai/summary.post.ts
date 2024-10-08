@@ -5,6 +5,7 @@ import { summary_prompt } from './shared/prompt'
 export default defineEventHandler(async (event) => {
   const { content } = await readBody(event)
   const summary = await fetchSummary(content, useRuntimeConfig())
+  console.warn('summary:', summary)
   return summary
 })
 

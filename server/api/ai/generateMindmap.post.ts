@@ -5,6 +5,7 @@ import { mindmap_prompt } from './shared/prompt'
 export default defineEventHandler(async (event) => {
   const { content } = await readBody(event)
   const mindmap = await fetchMindmap(content, useRuntimeConfig())
+  console.warn('mindmap:', mindmap)
   return mindmap
 })
 
