@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { updateTranscriptEpisode } from '~/composable/useEpisode'
-import { getTranscript, transcribe } from '~/composable/useTencent'
+import { transcribe } from '~/composable/useTencent'
 import { useTranscript } from '~/composable/useTranscript'
 import { type Episode, SearchState, TaskStatus, stateIconMap } from '~/types'
 
@@ -31,8 +31,7 @@ async function startTranscribing() {
 }
 
 async function exportTranscript() {
-  // export transcript to markdown file
-
+  // 实现导出功能
 }
 
 watchEffect(async () => {
@@ -47,17 +46,17 @@ watchEffect(async () => {
 <template>
   <div class="flex flex-col justify-center max-w-55%">
     <div class="flex justify-end">
-      <Button v-show="!episodeRef?.transcript" variant="outline" class="gap-2" :disabled="transcriptStateRef === SearchState.Loading" @click="startTranscribing">
-        <span>Start Transcribing</span>
+      <Button v-if="!episodeRef?.transcript" variant="outline" class="gap-2" :disabled="transcriptStateRef === SearchState.Loading" @click="startTranscribing">
+        <span>开始转录</span>
         <Icon :name="stateIconRef.icon" :style="{ color: stateIconRef.color }" class="size-6 text-muted-foreground" />
       </Button>
-      <Button v-show="episodeRef?.transcript" variant="outline" class="gap-2" @click="exportTranscript">
-        <span>Export</span>
+      <Button v-else variant="outline" class="gap-2" @click="exportTranscript">
+        <span>导出</span>
         <Icon name="i-carbon-export" />
       </Button>
     </div>
-    <div class="w-full flex justify-center">
-      <div v-if="episodeRef?.transcript" class=" text-left whitespace-pre-line" v-html="episodeRef.transcript " />
+    <div v-if="episodeRef?.transcript" class="w-full flex justify-center">
+      <div class="text-left whitespace-pre-line" v-html="episodeRef.transcript" />
     </div>
   </div>
 </template>

@@ -7,39 +7,51 @@ const props = defineProps<{
   episode: Episode
 }>()
 const episodeRef = ref(props.episode)
-const isStream = ref(false)
+const isStream = ref(true)
+
+// 使用计算属性优化性能
+const summary = computed(() => episodeRef.value.summary)
+
+// 使用防抖优化性能
+const debouncedHandleSummary = useDebounceFn(handleSummary, 300)
 
 async function handleSummary() {
+  episodeRef.value.summary = ''
   if (isStream.value) {
     await streamSummary()
   }
   else {
-    await summary()
+    await fetchAndUpdateSummary()
   }
 }
 
-async function summary() {
-  // console.warn('summary', episodeRef.value.transcript)
-  episodeRef.value.summary = ''
-  episodeRef.value.summary = await fetchSummary(episodeRef.value.transcript ?? '')
-  const { episode: updatedEpisode } = await updateSummaryEpisode(episodeRef.value.eid, episodeRef.value.summary ?? '')
-  episodeRef.value = updatedEpisode
+async function fetchAndUpdateSummary() {
+  const newSummary = await fetchSummary(episodeRef.value.transcript ?? '')
+  await updateSummaryAndEpisode(newSummary)
 }
+
 async function streamSummary() {
-  episodeRef.value.summary = ''
   const stream = await fetchStreamSummary(episodeRef.value.transcript ?? '')
   const reader = stream.getReader()
+  const decoder = new TextDecoder()
 
-  while (true) {
-    const { done, value } = await reader.read()
-    console.warn('value', new TextDecoder().decode(value))
-    if (done)
-      break
-    episodeRef.value.summary += new TextDecoder().decode(value)
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done)
+        break
+      episodeRef.value.summary += decoder.decode(value)
+    }
+  }
+  finally {
+    reader.releaseLock()
   }
 
-  // 更新数据库
-  const { episode: updatedEpisode } = await updateSummaryEpisode(episodeRef.value.eid, episodeRef.value.summary ?? '')
+  await updateSummaryAndEpisode(episodeRef.value.summary ?? '')
+}
+
+async function updateSummaryAndEpisode(newSummary: string) {
+  const { episode: updatedEpisode } = await updateSummaryEpisode(episodeRef.value.eid, newSummary)
   episodeRef.value = updatedEpisode
 }
 </script>
@@ -47,13 +59,13 @@ async function streamSummary() {
 <template>
   <div class="flex flex-col justify-center max-w-55%">
     <div class="flex justify-end">
-      <Button variant="outline" class="gap-2" @click="handleSummary">
+      <Button variant="outline" class="gap-2" @click="debouncedHandleSummary">
         <span>Summary</span>
         <Icon name="i-carbon-ai-status" />
       </Button>
     </div>
     <div class="w-full flex justify-center">
-      <div v-show="episodeRef?.summary" class=" text-left whitespace-pre-line" v-html="episodeRef.summary " />
+      <div v-if="summary" class="text-left whitespace-pre-line" v-html="summary" />
     </div>
   </div>
 </template>
