@@ -29,7 +29,7 @@ async function onSearch() {
 </script>
 
 <template>
-  <div class="flex justify-center m-2">
+  <div class="w-full p-2 my-2 flex flex-row   gap-2 justify-center items-center">
     <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
   </div>
 </template>

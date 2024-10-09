@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { updateIsLikeEpisode } from '~/composable/useEpisode'
 import { cn } from '~/lib/utils'
-import type { Episode } from '~/types'
+import type { Episode, EpisodeBasic } from '~/types'
 
 const props = defineProps<{
-  episode: Episode
+  episode: EpisodeBasic
 }>()
-const episode = ref<Episode>(props.episode)
+const episode = ref<EpisodeBasic>(props.episode)
 
 async function likeEpisode() {
   const { episode: data } = await updateIsLikeEpisode(props.episode.eid, true)
@@ -31,7 +31,7 @@ async function dislikeEpisode() {
         >
           <div>
             <img
-              :src="episode.image?.smallPicUrl ?? episode.podcast?.image?.smallPicUrl"
+              :src="episode.image?.smallPicUrl ?? ''"
               :alt="episode.title ?? ''"
               crossorigin="anonymous"
               class="w-100px rounded-md object-cover transition-all aspect-square"

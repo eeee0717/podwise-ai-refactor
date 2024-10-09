@@ -1,5 +1,5 @@
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
-import type { Episode } from '~/types'
+import type { Episode, EpisodeBasic } from '~/types'
 
 export async function handleFetchEpisodes(pid: string) {
   const { episodes, statusCode } = await useFetchEpisodes(pid)
@@ -37,6 +37,20 @@ export function formatEpisodes(episodes: any[] | null): Episode[] {
     }
   }).sort((a, b) => {
     return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+  })
+}
+export function formatEpisodesBasic(episode: any[] | null): EpisodeBasic[] {
+  if (!episode) {
+    return []
+  }
+  return episode.map((episode) => {
+    return {
+      eid: episode.eid,
+      title: episode.title,
+      description: episode.description,
+      image: jsonParseImage(episode.image),
+      isLiked: episode.isLiked,
+    }
   })
 }
 export async function queryEpisodes(pid: string) {

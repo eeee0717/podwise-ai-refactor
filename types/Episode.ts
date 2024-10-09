@@ -15,3 +15,11 @@ export interface Episode {
   summary?: string | null
   mindmap?: string | null
 }
+
+export interface EpisodeBasic {
+  eid: string
+  title?: string | null
+  description?: string | null
+  image?: Image | null
+  isLiked?: boolean | null
+}

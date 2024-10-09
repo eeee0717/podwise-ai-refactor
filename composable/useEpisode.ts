@@ -1,7 +1,7 @@
-import { formatEpisodes } from './useEpisodes'
+import { formatEpisodes, formatEpisodesBasic } from './useEpisodes'
 import { writePodcastToDb } from './usePodcast'
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
-import type { Episode } from '~/types'
+import type { Episode, EpisodeBasic } from '~/types'
 
 export const episodeRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/episode/g
 
@@ -44,6 +44,18 @@ export function formatEpisode(episode: any | null): Episode {
     enclosure: jsonParseEnclosure(episode.enclosure),
   } as Episode
 }
+export function formatEpisodeBasic(episode: any | null): EpisodeBasic {
+  if (!episode) {
+    return {} as EpisodeBasic
+  }
+  return {
+    eid: episode.eid,
+    title: episode.title,
+    description: episode.description,
+    image: jsonParseImage(episode.image),
+    isLiked: episode.isLiked,
+  }
+}
 
 export async function queryEpisode(eid: string) {
   const episode = await $fetch(`/api/episode/query?eid=${eid}`).then(res => formatEpisode(res.episode))
@@ -56,18 +68,18 @@ export async function queryLikedEpisodes() {
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then(res => formatEpisodes(res.episodes))
+  }).then(res => formatEpisodesBasic(res.episodes))
   return { episodes }
 }
 
-export async function updateIsLikeEpisode(eid: string, isLiked: boolean): Promise<{ episode: Episode }> {
+export async function updateIsLikeEpisode(eid: string, isLiked: boolean): Promise<{ episode: EpisodeBasic }> {
   const episode = await $fetch('/api/episode/updateIsLike', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ eid, isLiked }),
-  }).then(res => formatEpisode(res.episode))
+  }).then(res => formatEpisodeBasic(res.episode))
   return { episode }
 }
 
