@@ -65,7 +65,7 @@ async function updateSummaryAndEpisode(newSummary: string) {
       </Button>
     </div>
     <div class="w-full flex justify-center">
-      <div v-if="summary" class="text-left whitespace-pre-line" v-html="summary" />
+      <div v-if="summary" class="text-left whitespace-pre-line " v-html="summary" />
     </div>
   </div>
 </template>

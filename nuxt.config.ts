@@ -1,7 +1,11 @@
 /* eslint-disable node/prefer-global/process */
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-
+  devtools: {
+    enabled: true,
+    timeline: {
+      enabled: true,
+    },
+  },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
@@ -34,6 +38,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     '@pinia/nuxt',
+    'nuxt-security',
   ],
 
   shadcn: {
@@ -52,15 +57,19 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
-  nitro: {
-    routeRules: {
-      '/*': {
-        cors: true,
-        headers: {
-          'Cross-Origin-Embedder-Policy': 'require-corp',
-          'Cross-Origin-Opener-Policy': 'same-origin',
-        },
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: 'cross-origin',
+      crossOriginOpenerPolicy: 'same-origin',
+      contentSecurityPolicy: {
+        'default-src': '\'self\'',
+        'img-src': '\'self\' data: https: http:',
+        'connect-src': '\'self\' ws: wss:',
+        'script-src': '\'self\' \'unsafe-inline\' \'unsafe-eval\' https:',
+
       },
+
     },
   },
 

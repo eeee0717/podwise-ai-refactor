@@ -1,3 +1,9 @@
 export default defineEventHandler((event) => {
-  console.warn(`New request: ${getRequestURL(event)}`)
+  const url = getRequestURL(event)
+  const method = event.method
+
+  console.warn(`New request:
+  URL: ${url}
+  Method: ${method}
+ `)
 })

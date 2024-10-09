@@ -17,7 +17,7 @@ const shownotes = computed(() => props.episode?.shownotes || '')
   max-width: 55%;
 }
 .shownotes-content :deep(p) {
-  color: #333;
+  color: #ffffff;
   font-weight: normal;
   font-size: 16px;
   line-height: 1.25;
