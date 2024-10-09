@@ -54,10 +54,10 @@ async function dislikeEpisode() {
       </NuxtLink>
     </ContextMenuTrigger>
     <ContextMenuContent class="w-40">
-      <ContextMenuItem v-if="!episode.isLiked" @click="likeEpisode">
+      <ContextMenuItem v-if="!episode.isLiked" @click.stop.prevent="likeEpisode">
         Like the episode
       </ContextMenuItem>
-      <ContextMenuItem v-else @click="dislikeEpisode">
+      <ContextMenuItem v-else @click.stop.prevent="dislikeEpisode">
         Dislike the episode
       </ContextMenuItem>
     </ContextMenuContent>

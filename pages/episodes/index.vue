@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import { queryLikedEpisodes } from '~/composable/useEpisode'
-import { type Episode, type EpisodeBasic, SearchState } from '~/types'
+import { type EpisodeBasic, SearchState } from '~/types'
 
-const episodes = ref<EpisodeBasic[]>([])
-const episodesData = ref<EpisodeBasic[]>([])
+const { data: episodesData } = await useAsyncData('likedEpisodes', () => queryLikedEpisodes(), {
+  lazy: false,
+  server: false,
+  transform: result => result.episodes,
+})
+
+const episodes = computed(() => episodesData.value || [])
 
 const searchValue = ref<string>('')
 const searchState = ref<SearchState>(SearchState.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
 }
-onMounted(async () => {
-  const { episodes: data } = await queryLikedEpisodes()
-  if (data) {
-    episodes.value = data
-    episodesData.value = data
-    console.warn(data)
-  }
-})
 </script>
 
 <template>
