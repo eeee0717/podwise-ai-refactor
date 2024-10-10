@@ -1,16 +1,28 @@
-import { drizzle } from 'drizzle-orm/vercel-postgres'
-import { sql } from '@vercel/postgres'
 import { eq } from 'drizzle-orm'
+import { db } from '../../utils/db'
+
 import * as schema from '../../database/schema'
 
 export default defineEventHandler(async (event) => {
-  const { eid } = getQuery(event)
-  const db = drizzle(sql, { schema })
-  const startTime = Date.now()
-  const episode = await db.select().from(schema.episodesTable).where(eq(schema.episodesTable.eid, eid as string))
-  const endTime = Date.now()
-  const queryTime = endTime - startTime
-  console.warn(`Database query time: ${queryTime}ms`)
+  try {
+    const { eid } = getQuery(event)
 
-  return { episode: episode[0] }
+    if (typeof eid !== 'string' || eid.trim() === '') {
+      throw new Error('无效的 eid')
+    }
+
+    const episode = await db.query.episodesTable.findFirst({
+      where: eq(schema.episodesTable.eid, eid),
+    })
+
+    if (!episode) {
+      return { error: '未找到对应的剧集' }
+    }
+
+    return { episode }
+  }
+  catch (error) {
+    console.error('查询剧集时出错:', error)
+    return { error: '查询剧集时发生错误' }
+  }
 })

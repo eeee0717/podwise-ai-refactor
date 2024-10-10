@@ -9,7 +9,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-
+  nitro: {
+    plugins: ['~/server/plugins/db.ts'],
+  },
   runtimeConfig: {
     accessToken: process.env.X_JIKE_ACCESS_TOKEN,
     deviceId: process.env.X_JIKE_DEVICE_ID,

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { queryLikedEpisodes } from '~/composable/useEpisode'
+import { queryEpisode, queryLikedEpisodes } from '~/composable/useEpisode'
 
 const functionTimes = ref({})
 const testing = ref(false)
@@ -16,6 +16,7 @@ async function startTest() {
   testing.value = true
   functionTimes.value = {}
   await measureExecutionTime('queryLikedEpisodes', () => queryLikedEpisodes())
+  await measureExecutionTime('queryEpisode', () => queryEpisode('668e8b288fcadceb90650e55'))
   testing.value = false
 }
 </script>
