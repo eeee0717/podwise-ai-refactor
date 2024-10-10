@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { queryLikedEpisodes } from '~/composable/useEpisode'
-import { type EpisodeBasic, SearchState } from '~/types'
+import { SearchState } from '~/types'
 
 const { data: episodesData } = await useAsyncData('likedEpisodes', () => queryLikedEpisodes(), {
   lazy: false,

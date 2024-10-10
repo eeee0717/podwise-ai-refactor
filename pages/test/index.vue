@@ -1,17 +1,147 @@
-<script setup lang="ts">
-import { queryEpisodes } from '~/composable/useEpisodes'
+<script setup>
+import { ref } from 'vue'
+import { queryLikedEpisodes } from '~/composable/useEpisode'
 
-const pid = ref<string>()
+const functionTimes = ref({})
+const testing = ref(false)
 
-async function onEnter() {
-  console.warn('onEnter', pid.value)
-  const { episodes } = await queryEpisodes(pid.value!)
-  console.warn('episodes', episodes)
+async function measureExecutionTime(funcName, func) {
+  const start = performance.now()
+  await func()
+  const end = performance.now()
+  const executionTime = end - start
+  functionTimes.value[funcName] = executionTime.toFixed(2)
+}
+async function startTest() {
+  testing.value = true
+  functionTimes.value = {}
+  await measureExecutionTime('queryLikedEpisodes', () => queryLikedEpisodes())
+  testing.value = false
 }
 </script>
 
 <template>
-  <div class="flex justify-center p-10 h-screen">
-    <input v-model="pid" class="h-50px" @keyup.enter="onEnter">
+  <div class="container">
+    <h1 class="title">
+      函数调用时间测试
+    </h1>
+    <button :disabled="testing" class="test-button" @click="startTest">
+      {{ testing ? '测试中...' : '开始测试' }}
+    </button>
+    <div v-if="Object.keys(functionTimes).length > 0" class="results-container">
+      <h2 class="results-title">
+        测试结果
+      </h2>
+      <div v-for="(time, func) in functionTimes" :key="func" class="card">
+        <div class="func-name">
+          {{ func }}
+        </div>
+        <div class="time">
+          {{ time }} ms
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --card-background: #fff;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.test-button {
+  display: block;
+  width: 200px;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.test-button:hover {
+  background-color: #2980b9;
+}
+
+.test-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.results-container {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.results-title {
+  color: var(--secondary-color);
+  margin-bottom: 15px;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.card:last-child {
+  border-bottom: none;
+}
+
+.func-name {
+  font-weight: bold;
+}
+
+.time {
+  color: var(--primary-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --card-background: #34495e;
+  }
+
+  .test-button:hover {
+    background-color: #2980b9;
+  }
+
+  .test-button:disabled {
+    background-color: #7f8c8d;
+  }
+
+  .card {
+    border-bottom-color: #4a6278;
+  }
+}
+</style>

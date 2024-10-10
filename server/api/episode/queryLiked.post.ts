@@ -5,7 +5,6 @@ import * as schema from '../../database/schema'
 
 export default defineEventHandler(async () => {
   const db = drizzle(sql, { schema })
-  const startTime = Date.now()
   const episodes = await db
     .select({
       eid: schema.episodesTable.eid,
@@ -16,8 +15,5 @@ export default defineEventHandler(async () => {
     })
     .from(schema.episodesTable)
     .where(eq(schema.episodesTable.isLiked, true))
-  const endTime = Date.now()
-  const queryTime = endTime - startTime
-  console.warn(`Database query liked time: ${queryTime}ms`)
   return { episodes }
 })
