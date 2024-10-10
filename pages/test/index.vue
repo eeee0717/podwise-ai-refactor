@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { queryEpisode, queryLikedEpisodes } from '~/composable/useEpisode'
+import { queryAllPodcasts, queryPodcast } from '~/composable/usePodcast'
 
 const functionTimes = ref({})
 const testing = ref(false)
@@ -17,6 +18,9 @@ async function startTest() {
   functionTimes.value = {}
   await measureExecutionTime('queryLikedEpisodes', () => queryLikedEpisodes())
   await measureExecutionTime('queryEpisode', () => queryEpisode('668e8b288fcadceb90650e55'))
+  await measureExecutionTime('queryAllPodcasts', () => queryAllPodcasts())
+  await measureExecutionTime('queryPodcast', () => queryPodcast('62382c1103bea1ebfffa1c00'))
+
   testing.value = false
 }
 </script>

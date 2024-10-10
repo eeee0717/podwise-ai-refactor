@@ -49,6 +49,12 @@ export async function writePodcastToDb(podcast: Podcast) {
     body: JSON.stringify({ podcast }),
   }) // as { statusCode: number }
 }
+export function formatPodcast(podcast: any): Podcast {
+  return {
+    ...podcast,
+    image: jsonParseImage(podcast.image),
+  }
+}
 
 export function formatPodcasts(podcasts: any[]): Podcast[] {
   return podcasts.map((podcast) => {
@@ -59,18 +65,28 @@ export function formatPodcasts(podcasts: any[]): Podcast[] {
   })
 }
 
-/// fetch all podcasts from db when page on mounted
-export async function fetchDbPodcasts(pid?: string) {
-  console.warn('fetchDbPodcasts', pid)
-  const { podcasts } = await $fetch('/api/podcast/query', {
+export async function queryPodcast(pid: string) {
+  const { podcast } = await $fetch('/api/podcast/query', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ pidList: pid }),
+    body: JSON.stringify({ pid }),
+  }).then((res) => {
+    return { podcast: formatPodcast(res.podcast) }
+  })
+  console.warn('queryPodcast', podcast)
+  return { podcast }
+}
+export async function queryAllPodcasts() {
+  const { podcasts } = await $fetch('/api/podcast/queryAll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }).then((res) => {
     return { podcasts: formatPodcasts(res.podcasts) }
   })
-  const podcastStore = usePodcastStore()
-  podcastStore.setPodcasts(podcasts)
+  console.warn('queryAllPodcasts', podcasts)
+  return { podcasts }
 }

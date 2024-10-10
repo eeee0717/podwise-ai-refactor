@@ -16,13 +16,13 @@ export default defineEventHandler(async (event) => {
     })
 
     if (!episode) {
-      return { error: '未找到对应的剧集' }
+      return { episode: {} }
     }
 
     return { episode }
   }
   catch (error) {
     console.error('查询剧集时出错:', error)
-    return { error: '查询剧集时发生错误' }
+    return { episode: {} }
   }
 })

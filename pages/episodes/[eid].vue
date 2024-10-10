@@ -4,18 +4,17 @@ import TabTitle from '~/components/TabTitle.vue'
 import TranscriptCard from '~/components/TranscriptCard.vue'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { queryEpisode } from '~/composable/useEpisode'
-import type { Episode } from '~/types'
 
-const router = useRouter()
-const eid = router.currentRoute.value.params.eid as string
-const episode = ref<Episode>()
+const route = useRoute()
+const eid = route.params.eid as string
 
-onMounted(async () => {
-  const { episode: data } = await queryEpisode(eid)
-  console.warn(data)
-  if (data)
-    episode.value = data
-})
+const { data: episode } = await useAsyncData(
+  `episode-${eid}`,
+  () => queryEpisode(eid),
+  {
+    transform: result => result.episode,
+  },
+)
 </script>
 
 <template>

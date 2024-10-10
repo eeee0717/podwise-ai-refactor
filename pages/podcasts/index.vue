@@ -1,21 +1,34 @@
 <script setup lang="ts">
-import { fetchDbPodcasts } from '~/composable/usePodcast'
-import { usePodcastStore } from '~/store/usePodcastStore'
+import { queryAllPodcasts } from '~/composable/usePodcast'
+import { SearchState } from '~/types'
 
-const podcastStore = usePodcastStore()
-onMounted(async () => {
-  await fetchDbPodcasts()
+const { data: podcastsData } = await useAsyncData('allPodcasts', () => queryAllPodcasts(), {
+  server: false,
+  transform: result => result.podcasts,
 })
+
+const podcasts = computed(() => podcastsData.value || [])
+
+const searchValue = ref<string>('')
+const searchState = ref<SearchState>(SearchState.Idle)
+
+async function onSearch() {
+  podcastsData.value = podcasts.value?.filter(p =>
+    p.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase()),
+  ) ?? []
+}
 </script>
 
 <template>
-  <div class="flex justify-center p-10 h-screen">
-    <div class="h-auto justify-center" grid="~ 2xl:cols-3 xl:cols-2 lg:cols-2 md:cols-1 gap-15 auto-rows-20">
+  <div>
+    <div class="w-full p-2 my-2 flex flex-row gap-2 justify-center items-center">
+      <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
+    </div>
+    <div class="justify-center m-2" grid="~ 2xl:cols-3 xl:cols-2 lg:cols-2 md:cols-1 gap-15 auto-rows-20">
       <PodcastCard
-        v-for="podcast in podcastStore.podcasts"
+        v-for="podcast in podcasts"
         :key="podcast.pid"
         :podcast="podcast"
-        class="h-110px"
       />
     </div>
   </div>

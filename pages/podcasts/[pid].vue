@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SearchInput from '~/components/SearchInput.vue'
 import { queryEpisodes } from '~/composable/useEpisodes'
-import { fetchDbPodcasts } from '~/composable/usePodcast'
+import { queryPodcast } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import { type Episode, type Podcast, SearchState } from '~/types'
 
@@ -21,7 +21,7 @@ onMounted(async () => {
   const pid = router.currentRoute.value.params.pid as string
   // 检查 podcasts 中是否已存在对应数据
   if (!podcasts.value.find(podcast => podcast.pid === pid)) {
-    await fetchDbPodcasts(pid)
+    await queryPodcast(pid)
   }
   podcast.value = podcasts.value.find(podcast => podcast.pid === pid)
 
