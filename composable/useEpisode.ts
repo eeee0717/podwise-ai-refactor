@@ -1,4 +1,4 @@
-import { formatEpisodes, formatEpisodesBasic } from './useEpisodes'
+import { formatEpisodesBasic } from './useEpisodes'
 import { writePodcastToDb } from './usePodcast'
 import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
 import type { Episode, EpisodeBasic } from '~/types'
