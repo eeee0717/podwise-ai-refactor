@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { queryEpisode, queryLikedEpisodes } from '~/composable/useEpisode'
+import { handleFetchEpisode, queryEpisode, queryLikedEpisodes } from '~/composable/useEpisode'
 import { handleFetchEpisodes } from '~/composable/useEpisodes'
 import { queryAllPodcasts, queryPodcast } from '~/composable/usePodcast'
 
@@ -17,11 +17,12 @@ async function measureExecutionTime(funcName, func) {
 async function startTest() {
   testing.value = true
   functionTimes.value = {}
-  await measureExecutionTime('queryLikedEpisodes', () => queryLikedEpisodes())
-  await measureExecutionTime('queryEpisode', () => queryEpisode('668e8b288fcadceb90650e55'))
-  await measureExecutionTime('queryAllPodcasts', () => queryAllPodcasts())
-  await measureExecutionTime('queryPodcast', () => queryPodcast('62382c1103bea1ebfffa1c00'))
-  await measureExecutionTime('handleFetchEpisodes', () => handleFetchEpisodes('https://www.xiaoyuzhoufm.com/podcast/62382c1103bea1ebfffa1c00'))
+  // await measureExecutionTime('queryLikedEpisodes', () => queryLikedEpisodes())
+  // await measureExecutionTime('queryEpisode', () => queryEpisode('668e8b288fcadceb90650e55'))
+  // await measureExecutionTime('queryAllPodcasts', () => queryAllPodcasts())
+  // await measureExecutionTime('queryPodcast', () => queryPodcast('62382c1103bea1ebfffa1c00'))
+  await measureExecutionTime('handleFetchEpisodes', () => handleFetchEpisodes('62382c1103bea1ebfffa1c00'))
+  // await measureExecutionTime('handleFetchEpisode', () => handleFetchEpisode('https://www.xiaoyuzhoufm.com/episode/670412dd6c7f8177865af177'))
   testing.value = false
 }
 </script>

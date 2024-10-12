@@ -30,6 +30,7 @@ async function fetchEpisodes(
   }
   catch (e) {
     console.error('fetchEpisodes Error', e)
+    console.warn('pid', pid)
     return { episodes: null, statusCode: 400 }
   }
 }

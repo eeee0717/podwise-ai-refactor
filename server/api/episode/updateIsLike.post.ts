@@ -2,7 +2,6 @@ import { drizzle } from 'drizzle-orm/vercel-postgres'
 import { sql } from '@vercel/postgres'
 import { eq } from 'drizzle-orm'
 import * as schema from '../../database/schema'
-import type { EpisodeBasic } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const { eid, isLiked } = await readBody(event)

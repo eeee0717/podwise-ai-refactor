@@ -6,7 +6,7 @@ import type { Episode } from '~/types'
 
 export async function writeEpisodes(pid: string, episodes: Episode[], isLiked: boolean) {
   try {
-    console.warn('pid', pid)
+    console.warn('writeEpisodes', pid)
     const db = drizzle(sql, { schema })
     // const existEpisodes: Episode[] = []
     const existEpisodes = await db.select().from(schema.episodesTable).where(eq(schema.episodesTable.pid, pid))
@@ -41,6 +41,8 @@ export async function writeEpisodes(pid: string, episodes: Episode[], isLiked: b
 }
 
 export default defineEventHandler(async (event) => {
+  console.warn('API route handler triggered')
   const { pid, episodes, isLiked } = await readBody(event)
+  console.warn('writeEpisodes', pid, episodes.length)
   await writeEpisodes(pid, episodes, isLiked)
 })

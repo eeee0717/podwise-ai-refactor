@@ -8,19 +8,18 @@ export const episodeRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/episode/g
 
 export async function handleFetchEpisode(url: string) {
   const eid = url.split('/').pop()
-  if (!eid) {
+  if (!eid)
     return { episode: {} as Episode, statusCode: 400 }
-  }
-  const { episode, statusCode } = await useFetchEpisode(eid)
-  if (!episode) {
-    return { episode: {} as Episode, statusCode: 400 }
-  }
-  await writePodcastToDb(episode.podcast!)
-  await writeEpisodesToDb(episode.pid, [episode], true)
-  return { episode, statusCode }
-}
 
-export async function useFetchEpisode(eid: string): Promise<{ episode: Episode, statusCode: number }> {
+  const { episode, statusCode } = await fetchEpisode(eid)
+  if (episode) {
+    await writePodcastToDb(episode.podcast!)
+    await writeEpisodesToDb(episode.pid, [episode], true)
+  }
+
+  return { episode: episode ?? {} as Episode, statusCode: statusCode ?? 400 }
+}
+export async function fetchEpisode(eid: string): Promise<{ episode: Episode, statusCode: number }> {
   const { episode, statusCode } = await $fetch('/api/episode/get', {
     method: 'POST',
     headers: {
@@ -49,14 +48,11 @@ async function updateEpisodeField<T extends keyof Episode>(
   return { episode }
 }
 
-type EpisodeUpdateFields = 'transcript' | 'summary' | 'mindmap'
-
-function createEpisodeUpdater<T extends EpisodeUpdateFields>(field: T) {
+function createEpisodeUpdater<T extends keyof Pick<Episode, 'transcript' | 'summary' | 'mindmap'>>(field: T) {
   return async (eid: string, value?: Episode[T]): Promise<{ episode: Episode }> => {
     return updateEpisodeField(eid, field, value)
   }
 }
-
 export async function queryEpisode(eid: string) {
   const episode = await apiRequest<{ episode: any }>(`/episode/query`, 'GET', { eid })
     .then(res => formatEpisode(res.episode))
