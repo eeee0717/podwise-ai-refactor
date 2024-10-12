@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { queryEpisode, queryLikedEpisodes } from '~/composable/useEpisode'
+import { handleFetchEpisodes } from '~/composable/useEpisodes'
 import { queryAllPodcasts, queryPodcast } from '~/composable/usePodcast'
 
 const functionTimes = ref({})
@@ -20,7 +21,7 @@ async function startTest() {
   await measureExecutionTime('queryEpisode', () => queryEpisode('668e8b288fcadceb90650e55'))
   await measureExecutionTime('queryAllPodcasts', () => queryAllPodcasts())
   await measureExecutionTime('queryPodcast', () => queryPodcast('62382c1103bea1ebfffa1c00'))
-
+  await measureExecutionTime('handleFetchEpisodes', () => handleFetchEpisodes('https://www.xiaoyuzhoufm.com/podcast/62382c1103bea1ebfffa1c00'))
   testing.value = false
 }
 </script>

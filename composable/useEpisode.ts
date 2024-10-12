@@ -1,9 +1,8 @@
-import { formatEpisodesBasic } from './useEpisodes'
+import { apiRequest } from './apiRequest'
+import { formatEpisode, formatEpisodeBasic, formatEpisodesBasic } from './common'
 import { writePodcastToDb } from './usePodcast'
-import { jsonParseEnclosure, jsonParseImage, writeEpisodesToDb } from './utils'
+import { writeEpisodesToDb } from './utils'
 import type { Episode, EpisodeBasic } from '~/types'
-
-const API_BASE_URL = 'http://localhost:3030/api'
 
 export const episodeRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/episode/g
 
@@ -34,23 +33,6 @@ export async function useFetchEpisode(eid: string): Promise<{ episode: Episode, 
   return { episode, statusCode }
 }
 
-export async function apiRequest<T>(endpoint: string, method: 'POST' | 'GET' | 'HEAD' | 'PATCH' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE', params?: any): Promise<T> {
-  console.warn('url', `${API_BASE_URL}${endpoint}`)
-  const url = new URL(`${API_BASE_URL}${endpoint}`)
-
-  if (method === 'GET' && params) {
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-  }
-
-  return await $fetch(url.toString(), {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: method !== 'GET' && params ? JSON.stringify(params) : undefined,
-  })
-}
-
 async function updateEpisodeField<T extends keyof Episode>(
   eid: string,
   field: T,
@@ -66,30 +48,6 @@ async function updateEpisodeField<T extends keyof Episode>(
   ).then(res => formatEpisode(res.episode))
   return { episode }
 }
-export function formatEpisode(episode: any | null): Episode {
-  if (!episode) {
-    return {} as Episode
-  }
-  return {
-    ...episode,
-    // pgsql bug: https://www.cnblogs.com/wggj/p/8194313.html
-    shownotes: episode.shownotes ? episode.shownotes?.replace(/\0/g, '') : '',
-    image: jsonParseImage(episode.image),
-    enclosure: jsonParseEnclosure(episode.enclosure),
-  } as Episode
-}
-export function formatEpisodeBasic(episode: any | null): EpisodeBasic {
-  if (!episode) {
-    return {} as EpisodeBasic
-  }
-  return {
-    eid: episode.eid,
-    title: episode.title,
-    description: episode.description,
-    image: jsonParseImage(episode.image),
-    isLiked: episode.isLiked,
-  }
-}
 
 type EpisodeUpdateFields = 'transcript' | 'summary' | 'mindmap'
 
@@ -98,10 +56,6 @@ function createEpisodeUpdater<T extends EpisodeUpdateFields>(field: T) {
     return updateEpisodeField(eid, field, value)
   }
 }
-
-export const updateTranscriptEpisode = createEpisodeUpdater('transcript')
-export const updateSummaryEpisode = createEpisodeUpdater('summary')
-export const updateMindmapEpisode = createEpisodeUpdater('mindmap')
 
 export async function queryEpisode(eid: string) {
   const episode = await apiRequest<{ episode: any }>(`/episode/query`, 'GET', { eid })
@@ -120,3 +74,7 @@ export async function updateIsLikeEpisode(eid: string, isLiked: boolean): Promis
     .then(res => formatEpisodeBasic(res.episode))
   return { episode }
 }
+
+export const updateTranscriptEpisode = createEpisodeUpdater('transcript')
+export const updateSummaryEpisode = createEpisodeUpdater('summary')
+export const updateMindmapEpisode = createEpisodeUpdater('mindmap')
