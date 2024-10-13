@@ -4,27 +4,26 @@ import type { Episode, EpisodeBasic } from '~/types'
 export function formatEpisode(episode: any | null): Episode {
   if (!episode)
     return {} as Episode
-
-  return {
-    pid: episode.pid,
-    eid: episode.eid,
-    podcast: episode.podcast,
-    title: episode.title,
-    shownotes: episode.shownotes?.replace(/\0/g, '') ?? '',
-    description: episode.description,
-    enclosure: jsonParseEnclosure(episode.enclosure),
+  const formattedEpisode = {
+    ...episode,
+    // pgsql bug: https://www.cnblogs.com/wggj/p/8194313.html
+    shownotes: episode.shownotes ? episode.shownotes?.replace(/\0/g, '') : '',
     image: jsonParseImage(episode.image),
-    pubDate: episode.pubDate,
+    enclosure: jsonParseEnclosure(episode.enclosure),
   } as Episode
+  // console.warn('formatEpisode', formattedEpisode)
+  return formattedEpisode
 }
 
 export function formatEpisodes(episodes: any[] | null): Episode[] {
   if (!Array.isArray(episodes))
     return []
 
-  return episodes.map(formatEpisode).sort((a, b) =>
+  const formattedEpisodes = episodes.map(formatEpisode).sort((a, b) =>
     (new Date(b.pubDate ?? 0)).getTime() - (new Date(a.pubDate ?? 0)).getTime(),
   )
+  console.warn('formatEpisodes', formattedEpisodes)
+  return formattedEpisodes
 }
 export function formatEpisodeBasic(episode: any): EpisodeBasic {
   if (!episode) {

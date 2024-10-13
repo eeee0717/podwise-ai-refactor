@@ -1,6 +1,6 @@
 import { apiRequest } from './apiRequest'
 import { formatEpisodes } from './common'
-import { testApi, writeEpisodesToDbInBatches } from './utils'
+import { testApi, testApiInBatches, writeEpisodesToDb, writeEpisodesToDbInBatches } from './utils'
 
 export async function handleFetchEpisodes(pid: string) {
   const { episodes, statusCode } = await apiRequest<{ episodes: any[], statusCode: number }>('/episode/list', 'POST', { pid })
@@ -11,8 +11,9 @@ export async function handleFetchEpisodes(pid: string) {
   console.warn('handleFetchEpisodes', episodes)
   if (episodes.length > 0) {
     console.warn('writeEpisodesToDb', pid, episodes.length)
-    // await writeEpisodesToDbInBatches(pid, [episodes[0]])
-    await testApi(pid, [episodes[0]])
+    await writeEpisodesToDbInBatches(pid, episodes)
+    // await writeEpisodesToDb(pid, episodes)
+    // await testApiInBatches(pid, episodes)
   }
 
   return { episodes, statusCode }

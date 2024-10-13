@@ -44,5 +44,12 @@ export default defineEventHandler(async (event) => {
   console.warn('API route handler triggered')
   const { pid, episodes, isLiked } = await readBody(event)
   console.warn('writeEpisodes', pid, episodes.length)
-  await writeEpisodes(pid, episodes, isLiked)
+  const decodedEpisodes = episodes.map((episode: Episode) => {
+    return {
+      ...episode,
+      shownotes: decodeURIComponent(atob(episode.shownotes ?? '')),
+    }
+  })
+  // console.warn('decodedEpisodes', decodedEpisodes[0])
+  await writeEpisodes(pid, decodedEpisodes, isLiked)
 })
