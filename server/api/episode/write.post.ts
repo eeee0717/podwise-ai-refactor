@@ -4,43 +4,50 @@ import { eq } from 'drizzle-orm'
 import * as schema from '../../database/schema'
 import type { Episode } from '~/types'
 
-export async function writeEpisodes(pid: string, episodes: Episode[], isLiked: boolean) {
-  try {
-    console.warn('pid', pid)
-    const db = drizzle(sql, { schema })
-    // const existEpisodes: Episode[] = []
-    const existEpisodes = await db.select().from(schema.episodesTable).where(eq(schema.episodesTable.pid, pid))
-    if (existEpisodes.length === episodes.length) {
-      console.warn('existEpisodes length', existEpisodes.length)
-      return { episodes: existEpisodes }
-    }
-    // 存入数据库中不存在的数据，根据eid进行筛选
-    const filterEpisodes = episodes.filter((episode: Episode) =>
-      !existEpisodes.some(existEpisode => existEpisode.eid === episode.eid),
-    )
-    console.warn('filterEpisodes', filterEpisodes.length)
+async function writeEpisodes(pid: string, episodes: Episode[], isLiked: boolean) {
+  const db = drizzle(sql, { schema })
+  const existEpisodes = await db.select().from(schema.episodesTable).where(eq(schema.episodesTable.pid, pid))
 
-    const newDataList = filterEpisodes.map((e: Episode) => {
-      return {
-        pid: e.pid,
-        eid: e.eid,
-        title: e.title,
-        shownotes: e.shownotes,
-        description: e.description,
-        enclosure: JSON.stringify(e.enclosure),
-        image: e.image ? JSON.stringify(e.image) : JSON.stringify(e.podcast?.image),
-        pubDate: e.pubDate,
-        isLiked,
-      }
-    })
-    await db.insert(schema.episodesTable).values(newDataList)
+  if (existEpisodes.length === episodes.length) {
+    console.warn('No new episodes to insert')
+    return { episodes: existEpisodes }
   }
-  catch (e) {
-    console.error('writeEpisodes Error', e)
+
+  const newEpisodes = episodes.filter(episode =>
+    !existEpisodes.some(existEpisode => existEpisode.eid === episode.eid),
+  )
+
+  if (newEpisodes.length === 0) {
+    console.warn('No new episodes to insert')
+    return { episodes: existEpisodes }
   }
+
+  const newDataList = newEpisodes.map(e => ({
+    pid: e.pid,
+    eid: e.eid,
+    title: e.title,
+    shownotes: e.shownotes,
+    description: e.description,
+    enclosure: JSON.stringify(e.enclosure),
+    image: JSON.stringify(e.image || e.podcast?.image),
+    pubDate: e.pubDate,
+    isLiked,
+  }))
+
+  await db.insert(schema.episodesTable).values(newDataList)
+  console.warn(`Inserted ${newDataList.length} new episodes`)
 }
 
 export default defineEventHandler(async (event) => {
   const { pid, episodes, isLiked } = await readBody(event)
-  await writeEpisodes(pid, episodes, isLiked)
+  console.warn(`Processing ${episodes.length} episodes for podcast ${pid}`)
+
+  const decodedEpisodes = episodes.map((episode: Episode) => ({
+    ...episode,
+    shownotes: decodeURIComponent(atob(episode.shownotes ?? '')),
+  }))
+
+  const startTime = Date.now()
+  await writeEpisodes(pid, decodedEpisodes, isLiked)
+  console.warn(`Operation completed in ${Date.now() - startTime}ms`)
 })

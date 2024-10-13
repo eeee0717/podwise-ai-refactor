@@ -26,7 +26,7 @@ async function generate_mindmap() {
 
   const { episode: updatedEpisode } = await updateMindmapEpisode(
     episodeRef.value.eid,
-    episodeRef.value.summary,
+    episodeRef.value.mindmap,
   )
 
   episodeRef.value = updatedEpisode

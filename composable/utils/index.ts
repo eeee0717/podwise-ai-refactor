@@ -26,12 +26,58 @@ export function jsonParseEnclosure(enclosure: any): Enclosure {
   return enclosure as Enclosure
 }
 
+export async function writeEpisodesToDbInBatches(pid: string, episodes: Episode[], batchSize = 50) {
+  for (let i = 0; i < episodes.length; i += batchSize) {
+    const batch = episodes.slice(i, i + batchSize)
+    await writeEpisodesToDb(pid, batch)
+  }
+}
+
 export async function writeEpisodesToDb(pid: string, episodes: Episode[], isLiked = false) {
-  await $fetch('/api/episode/write', {
+  try {
+    const encodedEpisodes = episodes.map((episode) => {
+      return {
+        ...episode,
+        // due to shownotes are HTML, we need to encode it to base64
+        shownotes: episode.shownotes ? btoa(encodeURIComponent(episode.shownotes.replace(/\0/g, ''))) : '',
+      }
+    })
+    const response = await $fetch('/api/episode/write', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ pid, episodes: encodedEpisodes, isLiked }),
+    })
+    console.warn('writeEpisodesToDb response', response)
+  }
+  catch (error) {
+    console.error('Error in writeEpisodesToDb:', error)
+    throw error // 重新抛出错误，以便调用者可以处理它
+  }
+}
+
+export async function testApiInBatches(pid: string, episodes: Episode[], batchSize = 50) {
+  for (let i = 0; i < episodes.length; i += batchSize) {
+    const batch = episodes.slice(i, i + batchSize)
+    await testApi(pid, batch)
+  }
+}
+
+export async function testApi(pid: string, episodes: Episode[]) {
+  const mockEpisodes = episodes.map((episode) => {
+    const { pid, eid, podcast, title, shownotes } = episode
+    const formattedShownotes = shownotes ? btoa(encodeURIComponent(shownotes.replace(/\0/g, ''))) : ''
+    return { pid, eid, podcast, title, shownotes: formattedShownotes }
+  })
+  const body = JSON.stringify({ pid, episodes: mockEpisodes })
+  console.warn('testApi', body)
+  const response = await $fetch('/api/episode/test', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ pid, episodes, isLiked }),
+    body,
   })
+  console.warn('test response', response)
 }
