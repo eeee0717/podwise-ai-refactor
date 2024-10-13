@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { updateSummaryEpisode } from '~/composable/useEpisode'
 import { fetchStreamSummary, fetchSummary } from '~/composable/useSummary'
-import type { Episode } from '~/types'
+import { type Episode, SearchState, stateIconMap } from '~/types'
 
 const props = defineProps<{
   episode: Episode
 }>()
 const episodeRef = ref(props.episode)
 const isStream = ref(true)
+const summaryStateRef = ref<SearchState>(SearchState.Idle)
+const stateIconRef = computed(() => stateIconMap[summaryStateRef.value])
 
 // 使用计算属性优化性能
 const summary = computed(() => episodeRef.value.summary)
@@ -17,12 +19,15 @@ const debouncedHandleSummary = useDebounceFn(handleSummary, 300)
 
 async function handleSummary() {
   episodeRef.value.summary = ''
+  summaryStateRef.value = SearchState.Loading
+
   if (isStream.value) {
     await streamSummary()
   }
   else {
     await fetchAndUpdateSummary()
   }
+  summaryStateRef.value = SearchState.Success
 }
 
 async function fetchAndUpdateSummary() {
@@ -58,10 +63,10 @@ async function updateSummaryAndEpisode(newSummary: string) {
 
 <template>
   <div class="flex flex-col justify-center max-w-55%">
-    <div class="flex justify-end">
-      <Button variant="outline" class="gap-2" @click="debouncedHandleSummary">
-        <span>Summary</span>
-        <Icon name="i-carbon-ai-status" />
+    <div class="flex justify-center">
+      <Button variant="outline" class="gap-2" :disabled="summaryStateRef === SearchState.Loading" @click="debouncedHandleSummary">
+        <span>开始总结</span>
+        <Icon :name="stateIconRef.icon" :style="{ color: stateIconRef.color }" class="size-6 text-muted-foreground" />
       </Button>
     </div>
     <div class="w-full flex justify-center">

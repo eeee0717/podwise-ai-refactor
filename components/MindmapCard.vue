@@ -46,7 +46,7 @@ async function generate_mindmap() {
         <Icon name="i-carbon-ai-status" />
       </Button>
     </div>
-    <div v-if="mindmap" class="h-screen w-full" border="~ amber">
+    <div v-if="mindmap" class="h-screen w-full">
       <Mindmap :mindmap="mindmap" />
     </div>
   </div>
