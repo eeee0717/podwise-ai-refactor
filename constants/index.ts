@@ -23,4 +23,9 @@ export const verticalLinks: LinkProp[] = [
     icon: 'i-carbon-rocket',
     path: '/test',
   },
+  {
+    title: 'UI',
+    icon: 'i-carbon-image',
+    path: '/ui',
+  },
 ]

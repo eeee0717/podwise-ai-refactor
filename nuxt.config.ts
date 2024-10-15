@@ -28,6 +28,24 @@ export default defineNuxtConfig({
     doubaoApi: process.env.DOUBAO_API,
     doubaoBaseUrl: process.env.DOUBAO_BASE_URL,
     doubaoModel: process.env.DOUBAO_MODEL,
+    public: {
+      motion: {
+        directives: {
+          'pop-bottom': {
+            initial: {
+              scale: 0,
+              opacity: 0,
+              y: 100,
+            },
+            visible: {
+              scale: 1,
+              opacity: 1,
+              y: 0,
+            },
+          },
+        },
+      },
+    },
   },
 
   modules: [
@@ -41,6 +59,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@pinia/nuxt',
     'nuxt-security',
+    '@vueuse/motion/nuxt',
   ],
 
   shadcn: {

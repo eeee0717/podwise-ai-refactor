@@ -16,7 +16,7 @@ const taskStatusRef = ref<TaskStatus>(TaskStatus.Waiting)
 
 const { pause, resume } = useTimeoutPoll(async () => {
   await useTranscript(taskIdRef.value, episodeRef, taskStatusRef)
-}, 5000)
+}, 20000)
 
 async function startTranscribing() {
   return

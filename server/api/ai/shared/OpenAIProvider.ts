@@ -42,6 +42,7 @@ export class OpenAIProvider implements IProvider {
         messages: [
           { role: 'system', content: prompt },
           { role: 'user', content },
+          // { role: 'user', content: 'This is a test' },
         ],
 
       })
