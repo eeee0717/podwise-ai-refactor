@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const message = ref('Hello, this is a UI test page!')
 </script>
 
 <template>
   <div>
-    <h1>{{ message }}</h1>
-    <button @click="message = 'Button clicked!'">
-      Click Me
-    </button>
+    <GradientCanvas class="w-auto h-auto">
+      <div>
+        Hello, World! This is inside the gradient canvas.
+      </div>
+    </GradientCanvas>
   </div>
 </template>

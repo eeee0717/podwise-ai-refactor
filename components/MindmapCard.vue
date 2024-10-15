@@ -12,12 +12,13 @@ const props = defineProps<{
 
 const episodeRef = ref(props.episode)
 const mindmapStateRef = ref<SearchState>(SearchState.Start)
-
+const isAnimating = ref<boolean>(false)
+const isStop = ref<boolean>(false)
 // 使用计算属性优化性能
 const mindmap = computed(() => episodeRef.value.mindmap)
 
 // 使用防抖优化性能
-const debouncedGenerateMindmap = useDebounceFn(generate_mindmap, 300)
+const debouncedGenerateMindmap = useDebounceFn(generate_mindmap, 10)
 
 // 定义状态到动画状态的映射
 const statusToStateMap = {
@@ -31,6 +32,7 @@ async function generate_mindmap() {
     return
 
   mindmapStateRef.value = SearchState.Loading
+  isAnimating.value = true
   episodeRef.value.mindmap = ''
   episodeRef.value.mindmap = await useGenerateMindmap(episodeRef.value.summary)
 
@@ -41,6 +43,8 @@ async function generate_mindmap() {
 
   episodeRef.value = updatedEpisode
   mindmapStateRef.value = SearchState.Success
+  isAnimating.value = false
+  isStop.value = true
 }
 </script>
 
@@ -61,8 +65,12 @@ async function generate_mindmap() {
         </template>
       </AnimationButton>
     </div>
-    <div v-if="mindmap" class="h-screen w-full">
-      <Mindmap :mindmap="mindmap" />
+    <div>
+      <GradientCanvas :start="isAnimating" :stop="isStop">
+        <div v-if="mindmap" class="w-full h-full">
+          <Mindmap :mindmap="mindmap" />
+        </div>
+      </GradientCanvas>
     </div>
   </div>
 </template>

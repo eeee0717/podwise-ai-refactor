@@ -50,7 +50,7 @@ watchEffect(() => {
   }
 })
 
-function handleClick() {
+async function handleClick() {
   props.onClick()
 }
 </script>
