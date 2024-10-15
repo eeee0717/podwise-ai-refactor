@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const episodeRef = ref(props.episode)
 const taskIdRef = ref<number>(0)
-const transcriptStateRef = ref<SearchState>(SearchState.Idle)
+const transcriptStateRef = ref<SearchState>(SearchState.Start)
 const stateIconRef = computed(() => stateIconMap[transcriptStateRef.value])
 const taskStatusRef = ref<TaskStatus>(TaskStatus.Waiting)
 
