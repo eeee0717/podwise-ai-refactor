@@ -10,7 +10,7 @@ const { data: podcastsData } = await useAsyncData('allPodcasts', () => queryAllP
 const podcasts = computed(() => podcastsData.value || [])
 
 const searchValue = ref<string>('')
-const searchState = ref<SearchState>(SearchState.Start)
+const searchState = ref<SearchState>(SearchState.Idle)
 
 async function onSearch() {
   podcastsData.value = podcasts.value?.filter(p =>

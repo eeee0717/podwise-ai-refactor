@@ -11,7 +11,7 @@ const { data: episodesData } = await useAsyncData('likedEpisodes', () => queryLi
 const episodes = computed(() => episodesData.value || [])
 
 const searchValue = ref<string>('')
-const searchState = ref<SearchState>(SearchState.Start)
+const searchState = ref<SearchState>(SearchState.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
 }

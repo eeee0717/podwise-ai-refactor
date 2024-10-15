@@ -3,7 +3,7 @@ import { episodeRegex, handleFetchEpisode } from '~/composable/useEpisode'
 import { handlePodcast, podcastRegex } from '~/composable/usePodcast'
 import { SearchState } from '~/types/States'
 
-const searchState = ref<SearchState>(SearchState.Start)
+const searchState = ref<SearchState>(SearchState.Idle)
 const searchValue = ref<string>('')
 const router = useRouter()
 async function onSearch() {

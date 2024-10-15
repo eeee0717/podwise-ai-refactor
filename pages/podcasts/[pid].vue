@@ -13,7 +13,7 @@ const episodes = ref<Episode[]>()
 const episodesData = ref<Episode[]>()
 
 const searchValue = ref<string>('')
-const searchState = ref<SearchState>(SearchState.Start)
+const searchState = ref<SearchState>(SearchState.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
 }
