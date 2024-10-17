@@ -89,3 +89,13 @@ export async function queryAllPodcasts() {
   console.warn('queryAllPodcasts', podcasts)
   return { podcasts }
 }
+
+export async function deletePodcastById(pid: string) {
+  await $fetch('/api/podcast/delete', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ pid }),
+  })
+}

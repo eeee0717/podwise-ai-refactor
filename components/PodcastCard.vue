@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { deletePodcastById } from '~/composable/usePodcast'
 import { cn } from '~/lib/utils'
 import type { Podcast } from '~/types'
 
@@ -7,6 +8,11 @@ const props = defineProps<{
   width?: number
   height?: number
 }>()
+
+async function deletePodcast() {
+  console.warn('deletePodcast', props.podcast.pid)
+  await deletePodcastById(props.podcast.pid)
+}
 </script>
 
 <template>
@@ -41,6 +47,9 @@ const props = defineProps<{
     </ContextMenuTrigger>
     <ContextMenuContent class="w-40">
       <ContextMenuItem>Add to Library</ContextMenuItem>
+      <ContextMenuItem @click.stop.prevent="deletePodcast">
+        Delete Podcast
+      </ContextMenuItem>
     </ContextMenuContent>
   </ContextMenu>
 </template>
