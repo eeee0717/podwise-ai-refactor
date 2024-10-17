@@ -1,6 +1,5 @@
 import { jsonParseImage } from './utils'
 import { handleFetchEpisodes } from './useEpisodes'
-import { usePodcastStore } from '~/store/usePodcastStore'
 import type { Episode, Podcast } from '~/types'
 
 export const podcastRegex = /https:\/\/www\.xiaoyuzhoufm\.com\/podcast/g

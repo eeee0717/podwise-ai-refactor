@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SearchInput from '~/components/SearchInput.vue'
-import { queryEpisodes } from '~/composable/useEpisodes'
+import { handleFetchEpisodes, queryEpisodes } from '~/composable/useEpisodes'
 import { queryPodcast } from '~/composable/usePodcast'
 import { usePodcastStore } from '~/store/usePodcastStore'
 import { type Episode, type Podcast, SearchState } from '~/types'
@@ -16,6 +16,17 @@ const searchValue = ref<string>('')
 const searchState = ref<SearchState>(SearchState.Idle)
 async function onSearch() {
   episodesData.value = episodes.value?.filter(e => e.title?.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())) ?? []
+}
+async function refreshClick() {
+  const pid = router.currentRoute.value.params.pid as string
+  await handleFetchEpisodes(pid)
+  // 并行获取 episodes 数据
+  const { episodes: data } = await queryEpisodes(pid)
+  if (data) {
+    episodes.value = data
+    episodesData.value = data
+  }
+  console.warn('refreshClick')
 }
 onMounted(async () => {
   const pid = router.currentRoute.value.params.pid as string
@@ -45,6 +56,9 @@ onMounted(async () => {
       </div>
       <div class="w-full p-2 my-2 flex flex-row   gap-2 justify-center items-center">
         <SearchInput v-model="searchValue" :on-search="onSearch" :search-state="searchState" />
+        <Button variant="outline" @click="refreshClick">
+          Refresh
+        </Button>
       </div>
       <div class="justify-center m-2" grid="~ 2xl:cols-3 xl:cols-2 lg:cols-2 md:cols-1 gap-15 auto-rows-20">
         <EpisodeCard
